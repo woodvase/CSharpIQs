@@ -51,7 +51,9 @@ namespace InterviewQs
             Dictionary<char, int> expectedDict = new Dictionary<char, int>();
             Dictionary<char, int> appearance = new Dictionary<char, int>();
             foreach (char c in T) {
-                appearance.Add(c, 0);
+                if (!appearance.ContainsKey(c)) {
+                    appearance.Add(c, 0);
+                }
                 if (expectedDict.ContainsKey(c)) {
                     expectedDict[c]++;
                 } else {
