@@ -1,0 +1,6 @@
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\bin\Debug\InterviewQs.exe.config
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\bin\Debug\InterviewQs.exe
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\bin\Debug\InterviewQs.pdb
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\obj\Debug\InterviewQs.csprojResolveAssemblyReference.cache
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\obj\Debug\InterviewQs.exe
+C:\Users\yoli\Documents\GitHub\C#_IQs\CSharpIQs\InterviewQs\obj\Debug\InterviewQs.pdb
