@@ -36,6 +36,28 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/remove-linked-list-elements/
+		public ListNode RemoveElements(ListNode head, int val)
+		{
+			ListNode dummyNode = new ListNode(0);
+			dummyNode.next = head;
+			ListNode cur = dummyNode;
+			while (cur != null)
+			{
+				if (cur.next != null && cur.next.val == val)
+				{
+					cur.next = cur.next.next;
+				}
+				else
+				{
+					cur = cur.next;
+				}
+			}
+			return dummyNode.next;
+		}
+        
+    
+		
 		// https://leetcode.com/problems/minimum-window-substring/
 		// For example,
 		// S = "ADOBECODEBANC"
