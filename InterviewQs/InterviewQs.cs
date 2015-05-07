@@ -34,8 +34,51 @@ namespace InterviewQs
 			List<string> words = new List<string>(strs);
 			FullJustify(words, 30);
 			MinWindow("ADOBECODEBANC", "ABC");
+			PrintSet(4);
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
+		}
+		
+				
+		// https://leetcode.com/problems/reverse-linked-list/
+		ListNode reverseList(ListNode head)
+		{
+			if(head == null)
+				return null;
+			ListNode newHead = head;
+			ListNode nextNode = head.next;
+			
+			newHead.next = null;
+			while(nextNode != null)
+			{
+				ListNode tmp = nextNode;
+				nextNode = nextNode.next;
+				tmp.next = newHead;
+				newHead = tmp;
+			}
+			
+			return newHead;
+		}
+		
+		public static void PrintSet(int i)
+		{
+			if(i == 0) return;
+			for(int k = 0; k < Math.Pow(2,i); k ++)
+			{
+				StringBuilder sb = new StringBuilder();
+				for(int m = i; m > 0; m --)
+				{
+					if((k & (1 << (m - 1))) > 0)
+					{
+						sb.Append('T');
+					}
+					else
+					{
+						sb.Append('F');
+					}
+				}
+				Console.WriteLine(sb.ToString());
+			}
 		}
         
 		// https://leetcode.com/problems/remove-linked-list-elements/
