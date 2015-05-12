@@ -39,7 +39,57 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/minimum-size-subarray-sum/
+		// O(n)
+		public int MinSubArrayLen(int s, int[] nums)
+		{
+			if (nums.Length == 0)
+				return 0;
+			if (s == 0)
+				return 1;
+			int start = 0;
+			int end = 0;
+			int tmpSum = 0;
+			int minLen = nums.Length;
+			while (end < nums.Length && tmpSum < s)
+			{
+				tmpSum += nums[end++];
+			}
+			
+			if (end == nums.Length && tmpSum < s)
+			{
+				return 0;
+			}
+			
+			minLen = end - start < minLen ? end - start : minLen;
+			while (start < nums.Length)
+			{
+				if (tmpSum >= s)
+				{
+					tmpSum -= nums[start ++];
+				}
+				else
+				{
+					if (end < nums.Length)
+					{
+						tmpSum += nums[end ++];
+					}
+					else
+					{
+						return minLen;
+					}
+				}
 				
+				if (tmpSum >= s && end - start < minLen)
+				{
+					minLen = end - start;	
+				}					
+			}
+			
+			return minLen;
+		}
+        
+    			
 		// https://leetcode.com/problems/reverse-linked-list/
 		ListNode reverseList(ListNode head)
 		{
