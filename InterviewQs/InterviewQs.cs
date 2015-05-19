@@ -39,8 +39,9 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		
 		// https://leetcode.com/problems/minimum-size-subarray-sum/
-		// O(n)
+		// O(n2)
 		public int MinSubArrayLen(int s, int[] nums)
 		{
 			if (nums.Length == 0)
