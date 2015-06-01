@@ -38,7 +38,47 @@ namespace InterviewQs
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
+				
+		// https://leetcode.com/problems/contains-duplicate-ii/
+		public bool ContainsNearbyDuplicate(int[] nums, int k) {
+			Dictionary<int, int> dict = new Dictionary<int, int>();
+			if(nums.Length < 2) return false;
+			for(int i = 0; i < nums.Length; i ++)
+			{
+				if(dict.ContainsKey(nums[i]))
+				{
+					if(i - dict[nums[i]] <= k)
+					{
+						return true;
+					}
+					else
+					{
+						dict[nums[i]] = i;
+					}
+				}
+				else
+				{
+					dict.Add(nums[i], i);
+				}
+			}
+			return false;
+		}
 		
+		// https://leetcode.com/problems/contains-duplicate/
+		public bool ContainsDuplicate(int[] nums) {
+		
+			HashSet<int> dict = new HashSet<int>();
+			if(nums.Length < 2) return false;
+			foreach(int num in nums)
+			{
+				if(dict.Contains(num))
+					return true;
+				dict.Add(num);
+			}
+			return false;
+		}
+        
+    	
 		
 		// https://leetcode.com/problems/minimum-size-subarray-sum/
 		// O(n2)
