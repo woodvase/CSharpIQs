@@ -17,6 +17,15 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
 			// TODO: Implement Functionality Here
+			
+			Trie trie = new Trie();
+			trie.Insert("dogg");
+			trie.Insert("deot");
+			trie.Insert("eat");
+			trie.Insert("de");
+			Console.WriteLine(trie.Search("dog"));
+			Console.WriteLine(trie.StartsWith("dog"));
+			
 			string[] strs = new string[]
 			{
 				"Don't",
