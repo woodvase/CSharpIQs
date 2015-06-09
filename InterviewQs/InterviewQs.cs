@@ -35,10 +35,34 @@ namespace InterviewQs
 			FullJustify(words, 30);
 			MinWindow("ADOBECODEBANC", "ABC");
 			PrintSet(4);
+			ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
-				
+		
+		// https://leetcode.com/problems/count-complete-tree-nodes/
+		public int CountNodesRecursive(TreeNode root) {
+			if(root == null)
+				return 0;
+			int l = 1;
+			int r = 1;
+			TreeNode node = root.left;
+			while(node != null)
+			{
+				l ++;
+				node = node.left;
+			}
+			
+			node = root.right;
+			while(node != null)
+			{
+				r ++;
+				node = node.right;
+			}
+			if(l == r) return (int)Math.Pow(2, l) - 1;
+			return 1 + CountNodesRecursive(root.left) + CountNodesRecursive(root.right);
+    	}
+		
 		// https://leetcode.com/problems/contains-duplicate-ii/
 		public bool ContainsNearbyDuplicate(int[] nums, int k) {
 			Dictionary<int, int> dict = new Dictionary<int, int>();
