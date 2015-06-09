@@ -49,6 +49,23 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/submissions/detail/29662115/
+		public int ComputeArea(int A, int B, int C, int D, int E, int F, int G, int H)
+		{
+			int areaA = (C - A) * (D - B);
+			int areaB = (G - E) * (H - F);
+			
+			int allArea = areaA + areaB;
+			int overlap = 0;
+			int ol = Math.Min(G, C) - Math.Max(A, E);
+			int oh = Math.Min(H, D) - Math.Max(B, F);
+			if(ol > 0 && oh > 0)
+			{
+				overlap = ol * oh;
+			}
+			return allArea - overlap;
+    	}		
+		
 		// https://leetcode.com/problems/count-complete-tree-nodes/
 		public int CountNodesRecursive(TreeNode root)
 		{
