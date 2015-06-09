@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 namespace Solution {
     class Solution {
-        static void Main(string[] args) {
+        static void Main1(string[] args) {
             /* Enter your code here. Read input from STDIN. Print output to STDOUT */
             int n = Convert.ToInt32(Console.ReadLine());
             string klm = Console.ReadLine();
