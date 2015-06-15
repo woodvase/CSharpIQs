@@ -18,6 +18,8 @@ namespace InterviewQs
 		{
 			// TODO: Implement Functionality Here
 			
+			Console.WriteLine(FindKthLargest(new int[]{7,6,5,4,3,2,1},5));
+			
 			Trie trie = new Trie();
 			trie.Insert("dogg");
 			trie.Insert("deot");
@@ -49,6 +51,68 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/invert-binary-tree/
+		public TreeNode InvertTree(TreeNode root) 
+		{
+			if(root == null)
+				return null;
+			TreeNode tmpl = InvertTree(root.left);
+			TreeNode tmpr = InvertTree(root.right);
+			root.left = tmpr;
+			root.right = tmpl;
+			return root;
+		}
+    
+		
+		// https://leetcode.com/problems/kth-largest-element-in-an-array/
+		public static int FindKthLargest(int[] nums, int k)
+		{
+			int start = 0;
+			int end = nums.Length - 1;
+			while (true)
+			{
+				int i = ArrayPartition(nums, start, end);
+				if(i + 1 == k)
+					return nums[i];
+				if (i + 1 < k)
+				{
+					start = i + 1;
+				}
+				else
+				{
+					end = i - 1;
+				}
+			}
+		}
+		
+		private static int ArrayPartition(int[] nums, int start, int end)
+		{
+			int tmp = nums[start];
+			int left = start + 1;
+			int right = end;
+			while (left <= right)
+			{
+				while (left < end && nums[left] >= tmp)
+				{
+					left ++;
+				}
+				while (right > start && nums[right] <= tmp)
+				{
+					right--;
+				}
+				
+				if (left < right)
+				{
+					int a = nums[left];
+					nums[left] = nums[right];
+					nums[right] = a;
+				}
+			}
+			nums[start] = nums[right];
+			nums[right] = tmp;
+			
+			return right;
+		}
 		// https://leetcode.com/submissions/detail/29662115/
 		public int ComputeArea(int A, int B, int C, int D, int E, int F, int G, int H)
 		{
