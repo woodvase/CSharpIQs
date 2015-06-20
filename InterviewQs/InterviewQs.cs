@@ -51,6 +51,44 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/merge-intervals/
+		public IList<Interval> Merge(IList<Interval> intervals)
+		{
+			IList<Interval> ret = new List<Interval>();
+			if(intervals == null || intervals.Count == 0)
+			{
+				return ret;
+			}
+			Interval[] array = new Interval[intervals.Count];
+			intervals.CopyTo(array,0);
+			Array.Sort(array, this.CompareByStart);
+			
+			ret.Add(array[0]);
+			for(int i = 1; i < array.Length; i ++)
+			{
+				Interval tmp = ret[ret.Count -1];
+				if(tmp.end < array[i].start)
+				{
+					ret.Add(array[i]);
+					continue;
+				}
+				
+				if(tmp.end >= array[i].start && tmp.end < array[i].end)
+				{
+					tmp.end = array[i].end;
+				}
+			}
+			
+			return ret;
+		}
+		
+		private int CompareByStart(Interval a, Interval b)
+		{
+			if(a.start < b.start) return -1;
+			if(a.start > b.start) return 1;
+			return 0;
+		}
+		
 		// https://leetcode.com/problems/invert-binary-tree/
 		public TreeNode InvertTree(TreeNode root) 
 		{
@@ -61,8 +99,7 @@ namespace InterviewQs
 			root.left = tmpr;
 			root.right = tmpl;
 			return root;
-		}
-    
+		}    
 		
 		// https://leetcode.com/problems/kth-largest-element-in-an-array/
 		public static int FindKthLargest(int[] nums, int k)
@@ -113,6 +150,7 @@ namespace InterviewQs
 			
 			return right;
 		}
+		
 		// https://leetcode.com/submissions/detail/29662115/
 		public int ComputeArea(int A, int B, int C, int D, int E, int F, int G, int H)
 		{
@@ -194,8 +232,7 @@ namespace InterviewQs
 			}
 			return false;
 		}
-        
-    	
+            	
 		
 		// https://leetcode.com/problems/minimum-size-subarray-sum/
 		// O(n2)
