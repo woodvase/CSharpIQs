@@ -51,6 +51,97 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// Given an array arr[] of n integers, construct a Product Array prod[] (of same size) such that prod[i] is equal to the product of all the elements of arr[] except arr[i]. Solve it without division operator and in O(n).
+		// Example:
+		// arr[] = {10, 3, 5, 6, 2}
+		// prod[] = {180, 600, 360, 300, 900}
+		
+		// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+		public int FindMinInRotatedSortedArray(int[] nums) 
+		{
+			int ret = -1;
+			int l = 0;
+			int r = nums.Length - 1;
+			while(l < r)
+			{
+				if(nums[l] < nums[r])
+					return nums[l];
+				int mid = l + (r-l) / 2;
+				if(nums[l] > nums[mid])
+				{
+					r = mid;
+				}
+				else
+				{
+					l = mid + 1;
+				}
+			}			
+			ret = nums[l];
+			
+			return ret;
+		}
+           			
+		
+		// https://leetcode.com/problems/search-in-rotated-sorted-array/
+		public int Search(int[] nums, int target) 
+		{
+			int ret = -1;
+			if(nums == null || nums.Length == 0)
+				return ret;
+			int left = 0;
+			int right = nums.Length - 1;
+			int minp = -1;
+			while(left < right)
+			{
+				if(nums[left] < nums[right])
+				{
+					break;
+				}
+				int mid = left + (right - left) / 2;
+				if(nums[left] > nums[mid])
+				{
+					right = mid;
+				}
+				else
+				{
+					left = mid + 1;
+				}
+			}
+			
+			minp = left;
+			
+			if(target < nums[minp]) return -1;
+			ret = Bsearch(nums, 0, minp - 1, target);
+			if(ret >= 0)
+			{
+				return ret;
+			}
+			
+			return Bsearch(nums, minp, nums.Length - 1, target);
+    	}	
+		
+		private int Bsearch(int[] array, int start, int end, int target)
+		{
+			int l = start;
+			int r = end;
+			while(l <= r)
+			{
+				int mid = l + (r - l) / 2;
+				if(target == array[mid])
+					return mid;
+				if(target > array[mid])
+				{
+					l = mid + 1;
+				}
+				else
+				{
+					r = mid - 1;
+				}
+			}
+			
+			return -1;
+		}
+		
 		// https://leetcode.com/problems/merge-intervals/
 		public IList<Interval> Merge(IList<Interval> intervals)
 		{
