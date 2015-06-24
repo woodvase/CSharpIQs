@@ -80,7 +80,34 @@ namespace InterviewQs
 			
 			return ret;
 		}
-           			
+        
+		// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+		public int MaxProfit1(int[] prices) 
+		{
+			if (prices == null || prices.Length < 2)
+				return 0;
+			int min = prices[0];
+			int max = prices[0];
+			int ret = 0;
+			for (int i = 1; i < prices.Length; i++)
+			{
+				if (prices[i] < min)
+				{
+					min = prices[i];
+					max = prices[i];
+				}
+				else if(prices[i] > max)
+				{
+					max = prices[i];
+					if (max - min > ret)
+					{
+						ret = max - min;
+					}
+				}
+					
+			}
+			return ret;
+    	}		
 		
 		// https://leetcode.com/problems/search-in-rotated-sorted-array/
 		public int Search(int[] nums, int target) 
