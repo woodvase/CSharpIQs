@@ -80,6 +80,45 @@ namespace InterviewQs
 			
 			return ret;
 		}
+		//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+		public int MaxProfit2(int[] prices)
+		{
+			int allGain = 0;
+			int oneSell = 0;
+			int min = prices[0];
+			int max = prices[0];
+			if (prices == null || prices.Length < 2)
+			{
+				return 0;
+			}	
+			for (int i = 1; i++; i < prices.Length)
+			{
+				if (prices[i] < min)
+				{
+					allGain += oneSell;
+					oneSell = 0;
+					min = prices[i];
+					max = prices[i];
+				}
+				else
+				{
+					if (prices[i] > max)
+					{
+						max = prices[i];
+						oneSell = max - min;
+					}
+					else
+					{
+						allGain += oneSell;
+						min = prices[i];
+						max = prices[i];
+						oneSell = 0;
+					}
+				}
+			}
+			
+			return allGain + oneSell;
+		}
         
 		// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 		public int MaxProfit1(int[] prices) 
