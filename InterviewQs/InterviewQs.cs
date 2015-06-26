@@ -17,6 +17,12 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
 			// TODO: Implement Functionality Here
+<<<<<<< HEAD
+=======
+			
+			Console.WriteLine(FindKthLargest(new int[]{7,6,5,4,3,2,1},5));
+			
+>>>>>>> 608939cd1dd6165535cac359abf25afcceb2ac69
 			Trie trie = new Trie();
 			trie.Insert("dogg");
 			trie.Insert("deot");
@@ -48,6 +54,7 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+<<<<<<< HEAD
 		public int MaxProfit(int[] prices) 
 		{
 			if(prices == null || prices.Length < 2)
@@ -126,6 +133,263 @@ namespace InterviewQs
 			}
 			
 			return false;
+=======
+		// Given an array arr[] of n integers, construct a Product Array prod[] (of same size) such that prod[i] is equal to the product of all the elements of arr[] except arr[i]. Solve it without division operator and in O(n).
+		// Example:
+		// arr[] = {10, 3, 5, 6, 2}
+		// prod[] = {180, 600, 360, 300, 900}
+		
+		// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+		public int FindMinInRotatedSortedArray(int[] nums) 
+		{
+			int ret = -1;
+			int l = 0;
+			int r = nums.Length - 1;
+			while(l < r)
+			{
+				if(nums[l] < nums[r])
+					return nums[l];
+				int mid = l + (r-l) / 2;
+				if(nums[l] > nums[mid])
+				{
+					r = mid;
+				}
+				else
+				{
+					l = mid + 1;
+				}
+			}			
+			ret = nums[l];
+			
+			return ret;
+		}
+		//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+		public int MaxProfit2(int[] prices)
+		{
+			int allGain = 0;
+			int oneSell = 0;
+			int min = prices[0];
+			int max = prices[0];
+			if (prices == null || prices.Length < 2)
+			{
+				return 0;
+			}	
+			for (int i = 1; i++; i < prices.Length)
+			{
+				if (prices[i] < min)
+				{
+					allGain += oneSell;
+					oneSell = 0;
+					min = prices[i];
+					max = prices[i];
+				}
+				else
+				{
+					if (prices[i] > max)
+					{
+						max = prices[i];
+						oneSell = max - min;
+					}
+					else
+					{
+						allGain += oneSell;
+						min = prices[i];
+						max = prices[i];
+						oneSell = 0;
+					}
+				}
+			}
+			
+			return allGain + oneSell;
+		}
+        
+		// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+		public int MaxProfit1(int[] prices) 
+		{
+			if (prices == null || prices.Length < 2)
+				return 0;
+			int min = prices[0];
+			int max = prices[0];
+			int ret = 0;
+			for (int i = 1; i < prices.Length; i++)
+			{
+				if (prices[i] < min)
+				{
+					min = prices[i];
+					max = prices[i];
+				}
+				else if(prices[i] > max)
+				{
+					max = prices[i];
+					if (max - min > ret)
+					{
+						ret = max - min;
+					}
+				}
+					
+			}
+			return ret;
+    	}		
+		
+		// https://leetcode.com/problems/search-in-rotated-sorted-array/
+		public int Search(int[] nums, int target) 
+		{
+			int ret = -1;
+			if(nums == null || nums.Length == 0)
+				return ret;
+			int left = 0;
+			int right = nums.Length - 1;
+			int minp = -1;
+			while(left < right)
+			{
+				if(nums[left] < nums[right])
+				{
+					break;
+				}
+				int mid = left + (right - left) / 2;
+				if(nums[left] > nums[mid])
+				{
+					right = mid;
+				}
+				else
+				{
+					left = mid + 1;
+				}
+			}
+			
+			minp = left;
+			
+			if(target < nums[minp]) return -1;
+			ret = Bsearch(nums, 0, minp - 1, target);
+			if(ret >= 0)
+			{
+				return ret;
+			}
+			
+			return Bsearch(nums, minp, nums.Length - 1, target);
+    	}	
+		
+		private int Bsearch(int[] array, int start, int end, int target)
+		{
+			int l = start;
+			int r = end;
+			while(l <= r)
+			{
+				int mid = l + (r - l) / 2;
+				if(target == array[mid])
+					return mid;
+				if(target > array[mid])
+				{
+					l = mid + 1;
+				}
+				else
+				{
+					r = mid - 1;
+				}
+			}
+			
+			return -1;
+		}
+		
+		// https://leetcode.com/problems/merge-intervals/
+		public IList<Interval> Merge(IList<Interval> intervals)
+		{
+			IList<Interval> ret = new List<Interval>();
+			if(intervals == null || intervals.Count == 0)
+			{
+				return ret;
+			}
+			Interval[] array = new Interval[intervals.Count];
+			intervals.CopyTo(array,0);
+			Array.Sort(array, this.CompareByStart);
+			
+			ret.Add(array[0]);
+			for(int i = 1; i < array.Length; i ++)
+			{
+				Interval tmp = ret[ret.Count -1];
+				if(tmp.end < array[i].start)
+				{
+					ret.Add(array[i]);
+					continue;
+				}
+				
+				if(tmp.end >= array[i].start && tmp.end < array[i].end)
+				{
+					tmp.end = array[i].end;
+				}
+			}
+			
+			return ret;
+		}
+		
+		private int CompareByStart(Interval a, Interval b)
+		{
+			if(a.start < b.start) return -1;
+			if(a.start > b.start) return 1;
+			return 0;
+		}
+		
+		// https://leetcode.com/problems/invert-binary-tree/
+		public TreeNode InvertTree(TreeNode root) 
+		{
+			if(root == null)
+				return null;
+			TreeNode tmpl = InvertTree(root.left);
+			TreeNode tmpr = InvertTree(root.right);
+			root.left = tmpr;
+			root.right = tmpl;
+			return root;
+		}    
+		
+		// https://leetcode.com/problems/kth-largest-element-in-an-array/
+		public static int FindKthLargest(int[] nums, int k)
+		{
+			int start = 0;
+			int end = nums.Length - 1;
+			while (true)
+			{
+				int i = ArrayPartition(nums, start, end);
+				if(i + 1 == k)
+					return nums[i];
+				if (i + 1 < k)
+				{
+					start = i + 1;
+				}
+				else
+				{
+					end = i - 1;
+				}
+			}
+		}
+		
+		private static int ArrayPartition(int[] nums, int start, int end)
+		{
+			int tmp = nums[start];
+			int left = start + 1;
+			int right = end;
+			while (left <= right)
+			{
+				while (left < end && nums[left] >= tmp)
+				{
+					left ++;
+				}
+				while (right > start && nums[right] <= tmp)
+				{
+					right--;
+				}
+				
+				if (left < right)
+				{
+					int a = nums[left];
+					nums[left] = nums[right];
+					nums[right] = a;
+				}
+			}
+			nums[start] = nums[right];
+			nums[right] = tmp;
+			
+			return right;
+>>>>>>> 608939cd1dd6165535cac359abf25afcceb2ac69
 		}
 		
 		// https://leetcode.com/submissions/detail/29662115/
@@ -209,8 +473,7 @@ namespace InterviewQs
 			}
 			return false;
 		}
-        
-    	
+            	
 		
 		// https://leetcode.com/problems/minimum-size-subarray-sum/
 		// O(n2)
