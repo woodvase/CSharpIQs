@@ -17,7 +17,6 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
 			// TODO: Implement Functionality Here
-			
 			Trie trie = new Trie();
 			trie.Insert("dogg");
 			trie.Insert("deot");
@@ -49,6 +48,86 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		public int MaxProfit(int[] prices) 
+		{
+			if(prices == null || prices.Length < 2)
+				return 0;
+			int min = prices[0];
+			int max = prices[0];
+			int ret = max - min;
+			for(int i = 1; i< prices.Length; i ++)
+			{
+				if(prices[i] < min)
+				{
+					min = prices[i];
+				}
+				else
+				{
+					if(prices[i] > max)
+					{
+						max = prices[i];
+						if(max - min > ret)
+						{
+							ret = max - min;
+						}
+					}
+				}
+			}
+			return ret;
+		}
+		
+		// https://leetcode.com/problems/word-search-ii/
+		public static IList<string> FindWords(char[,] board, string[] words)
+		{
+			List<string> ret = new List<string>();
+			if(words == null || words.Length == 0) 
+				return ret;
+			foreach(string str in words)
+			{
+				bool[,] flags = new bool[board.GetLength(0),board.GetLength(1)];
+				for(int i = 0; i < board.GetLength(0); i ++)
+					for(int j = 0; j < board.GetLength(1); j ++)
+				{
+					FildWordsHelper(board, i, j, str, 0, flags, ret);
+				}
+			}
+			return ret;
+		}
+        
+		private static bool FildWordsHelper(char[,] board, int row, int col, string word, int index, bool[,] flags, List<string> foundStrings)
+		{
+			if(index == word.Length)
+			{
+				foundStrings.Add(word);
+				return true;
+			}
+			
+			if(row < 0 || row > board.GetLength(1))
+				return false;
+			if(col < 0 || col > board.GetLength(0))
+				return false;
+			
+			if(!flags[i, j] && board[i,j] == word[index])
+			{
+				flags[i,j] = true;
+				bool up = FildWordsHelper(board, row - 1, col,  word, index + 1, flags, foundStrings);
+				if(up)
+					return true;
+				bool down = FildWordsHelper(board, row + 1, col,  word, index + 1, flags, foundStrings);
+				if(down)
+					return true;
+				bool left = FildWordsHelper(board, row, col - 1,  word, index + 1, flags, foundStrings);
+				if(left)
+					return true;
+				bool right = FildWordsHelper(board, row, col + 1,  word, index + 1, flags, foundStrings);
+				if(right)
+					return true;
+				flags[i,j] = false;
+			}
+			
+			return false;
+		}
+		
 		// https://leetcode.com/submissions/detail/29662115/
 		public int ComputeArea(int A, int B, int C, int D, int E, int F, int G, int H)
 		{
@@ -64,7 +143,7 @@ namespace InterviewQs
 				overlap = ol * oh;
 			}
 			return allArea - overlap;
-    	}		
+		}
 		
 		// https://leetcode.com/problems/count-complete-tree-nodes/
 		public int CountNodesRecursive(TreeNode root)
