@@ -17,6 +17,7 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
 			// TODO: Implement Functionality Here
+			Console.WriteLine(CanFinish(2, new int[,]{ { 1, 0 }, { 0, 1} }));
 			Console.WriteLine(FindKthLargest(new int[]{ 7, 6, 5, 4, 3, 2, 1 }, 5));
 			
 			Trie trie = new Trie();
@@ -49,6 +50,27 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/course-schedule/
+		public static bool CanFinish(int numCourses, int[,] prerequisites)
+		{
+			Course[] courses = new Course[numCourses];
+			for (int i = 0; i < numCourses; i++) {
+			
+				courses[i] = new Course(i);
+			}
+			for (int j = 0; j < prerequisites.GetLength(0); j++) {
+			
+				courses[prerequisites[j, 0]].Prerequisites.Add(courses[prerequisites[j, 1]]);
+			}
+			for (int k = 0; k < numCourses; k++) {
+			
+				if (!courses[k].canBeDone())
+					return false;
+			}
+			
+			return true;
+		}
+   	
 		// https://leetcode.com/problems/validate-binary-search-tree/
 		public bool IsValidBST(TreeNode root)
 		{
