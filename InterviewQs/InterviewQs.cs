@@ -49,6 +49,48 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/validate-binary-search-tree/
+		public bool IsValidBST(TreeNode root)
+		{
+			return IsValidBSTHelper(root, Int64.MinValue, Int64.MaxValue);
+		} 
+		
+		private bool IsValidBSTHelper(TreeNode node, long min, long max)
+		{
+			if (node == null)
+				return true;
+			if (node.val <= min || node.val >= max)
+				return false;
+			return IsValidBSTHelper(node.left, min, node.val) && IsValidBSTHelper(node.right, node.val, max);
+		}
+		
+		// not verified by oj
+		public bool IsValidBST2(TreeNode root)
+		{
+			return IsValidBSTHelper2(root, root.left);
+		}
+		
+		private bool IsValidBSTHelper2(TreeNode node, TreeNode prev)
+		{
+			if(node == null) return true;
+			if(!IsValidBSTHelper2(node.left, node.left == null? null : node.left.left)) return false;
+			if (prev != null && prev.val >= node.val)
+				return false;
+			prev = node;
+			return IsValidBSTHelper2(node.right, prev);
+		}
+		
+		bool IsValidBSTHelper(TreeNode node, bool isRightChild, int target)
+		{
+			if (node == null)
+				return true;
+			if (isRightChild && node.val < target)
+				return false;
+			if (!isRightChild && node.val > target)
+				return false;
+			return IsValidBSTHelper(node.left, false, node.val) && IsValidBSTHelper(node.right, true, node.val);
+		}
+    
 		// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 		public int FindMinInRotatedSortedArray(int[] nums)
 		{
@@ -69,6 +111,7 @@ namespace InterviewQs
 			
 			return ret;
 		}
+		
 		//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 		public int MaxProfit2(int[] prices)
 		{
