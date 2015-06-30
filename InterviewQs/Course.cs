@@ -42,6 +42,22 @@ namespace InterviewQs
 				this.isDone = true;
 			}			
 			return true;
-		}			
+		}
+		
+		public bool GetOrdered(List<int> order)
+		{
+			if (!this.isDone) {
+				if (this.hasVisited)
+					return false;
+				this.hasVisited = true;
+				foreach (Course pre in this.Prerequisites) {
+					if (!pre.GetOrdered(order))
+						return false;
+				}
+				order.Add(this.Id);
+				this.isDone = true;
+			}
+			return true;
+		}
 	}
 }
