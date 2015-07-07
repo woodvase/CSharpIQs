@@ -71,8 +71,41 @@ namespace InterviewQs
 			return ret.ToArray();
 		}
         
-    
-		
+		// https://leetcode.com/problems/summary-ranges/
+		// Given a sorted integer array without duplicates, return the summary of its ranges.
+		// For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+		public IList<string> SummaryRanges(int[] nums)
+		{
+			List<string> ret = new List<string>();
+			if (nums == null || nums.Length == 0)
+				return ret;
+			int start = 0;
+			for (int i = 1; i < nums.Length; i++)
+			{
+				if (nums[i] - 1 > nums[i - 1])
+				{
+					StringBuilder sb = new StringBuilder();		
+					sb.Append(nums[start].ToString());
+					if (i - 1 > start)
+					{
+						sb.Append("->");
+						sb.Append(nums[i - 1].ToString());
+					}
+					ret.Add(sb.ToString());
+					start = i;
+				}
+			}
+			StringBuilder sb2 = new StringBuilder();
+			sb2.Append(nums[start].ToString());
+			if (start != nums.Length - 1)
+			{
+				sb2.Append("->");
+				sb2.Append(nums[nums.Length - 1].ToString());
+			}
+			ret.Add(sb2.ToString());
+			return ret;
+		}
+		                                  
 		// https://leetcode.com/problems/course-schedule/
 		public static bool CanFinish(int numCourses, int[,] prerequisites)
 		{
