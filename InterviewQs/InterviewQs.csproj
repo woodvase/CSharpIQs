@@ -54,6 +54,7 @@
     <Compile Include="ListNode.cs" />
     <Compile Include="MostCommonSubString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueBasedOnStack.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="Trie.cs" />
   </ItemGroup>
