@@ -51,6 +51,54 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+		public int KthSmallest_Solution2(TreeNode root, int k)
+		{
+			Stack<TreeNode> s = new Stack<TreeNode>();
+			TreeNode n = root;
+			while (n != null)
+			{
+				s.Push(n);
+				n = n.left;
+			}
+			while (k > 0)
+			{
+				TreeNode tmp = s.Pop();
+				k --;
+				if(k == 0)
+					return tmp.val;
+				tmp = tmp.right;
+				while (tmp != null)
+				{
+					s.Push(tmp);
+					tmp = tmp.left;
+				}
+			}
+			
+			return -1;
+		}
+		public int KthSmallest_Solution1(TreeNode root, int k)
+		{
+			int l = this.CountChild(root.left);
+			if (l == k - 1)
+				return root.val;
+			if (l + 1 > k)
+			{
+				return KthSmallest_Solution1(root.left, k);
+			}
+			else
+			{
+				return KthSmallest_Solution1(root.right, k - l - 1);
+			}
+		}
+		
+		private int CountChild(TreeNode node)
+		{
+			if (node == null)
+				return 0;
+			return 1 + CountChild(node.left) + CountChild(node.right);
+		}
+		
 		// https://leetcode.com/problems/course-schedule-ii/
 		public static int[] FindOrder(int numCourses, int[,] prerequisites)
 		{
