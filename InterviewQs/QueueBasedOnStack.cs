@@ -50,7 +50,7 @@ namespace InterviewQs
 				}
 			}
 			return pops.Peek();
-        }
+		}
 
 		// Return whether the queue is empty.
 		public bool Empty()
