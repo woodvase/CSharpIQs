@@ -43,6 +43,5 @@ Temporary Items
 .apdisk
 
 # CSharp project files
-*.cache
-*.pdb
-*.exe
+InterviewQs\bin\**
+InterviewQs\obj\**
