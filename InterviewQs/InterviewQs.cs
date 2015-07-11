@@ -17,8 +17,9 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
 			// TODO: Implement Functionality Here
-			
-			Console.WriteLine(FindKthLargest(new int[]{7,6,5,4,3,2,1},5));
+			Console.WriteLine(FindOrder(2, new int[,]{ { 1, 0 }, { 0, 1 } }));
+			Console.WriteLine(CanFinish(2, new int[,]{ { 1, 0 }, { 0, 1} }));
+			Console.WriteLine(FindKthLargest(new int[]{ 7, 6, 5, 4, 3, 2, 1 }, 5));
 			
 			Trie trie = new Trie();
 			trie.Insert("dogg");
@@ -28,8 +29,7 @@ namespace InterviewQs
 			Console.WriteLine(trie.Search("dog"));
 			Console.WriteLine(trie.StartsWith("dog"));
 			
-			string[] strs = new string[]
-			{
+			string[] strs = new string[] {
 				"Don't",
 				"go",
 				"around",
@@ -51,28 +51,185 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
-		// Given an array arr[] of n integers, construct a Product Array prod[] (of same size) such that prod[i] is equal to the product of all the elements of arr[] except arr[i]. Solve it without division operator and in O(n).
-		// Example:
-		// arr[] = {10, 3, 5, 6, 2}
-		// prod[] = {180, 600, 360, 300, 900}
+		// https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+		public int KthSmallest_Solution2(TreeNode root, int k)
+		{
+			Stack<TreeNode> s = new Stack<TreeNode>();
+			TreeNode n = root;
+			while (n != null)
+			{
+				s.Push(n);
+				n = n.left;
+			}
+			while (k > 0)
+			{
+				TreeNode tmp = s.Pop();
+				k --;
+				if(k == 0)
+					return tmp.val;
+				tmp = tmp.right;
+				while (tmp != null)
+				{
+					s.Push(tmp);
+					tmp = tmp.left;
+				}
+			}
+			
+			return -1;
+		}
+		public int KthSmallest_Solution1(TreeNode root, int k)
+		{
+			int l = this.CountChild(root.left);
+			if (l == k - 1)
+				return root.val;
+			if (l + 1 > k)
+			{
+				return KthSmallest_Solution1(root.left, k);
+			}
+			else
+			{
+				return KthSmallest_Solution1(root.right, k - l - 1);
+			}
+		}
 		
+		private int CountChild(TreeNode node)
+		{
+			if (node == null)
+				return 0;
+			return 1 + CountChild(node.left) + CountChild(node.right);
+		}
+		
+		// https://leetcode.com/problems/course-schedule-ii/
+		public static int[] FindOrder(int numCourses, int[,] prerequisites)
+		{
+			List<int> ret = new List<int>();
+			Course[] courses = new Course[numCourses];
+			for (int i = 0; i < numCourses; i++) {
+			
+				courses[i] = new Course(i);
+			}
+			for (int j = 0; j < prerequisites.GetLength(0); j++) {
+			
+				courses[prerequisites[j, 0]].Prerequisites.Add(courses[prerequisites[j, 1]]);
+			}
+			for (int k = 0; k < numCourses; k++) {
+				if(!courses[k].GetOrdered(ret))
+					return new int[0];
+			}
+			return ret.ToArray();
+		}
+        
+		// https://leetcode.com/problems/summary-ranges/
+		// Given a sorted integer array without duplicates, return the summary of its ranges.
+		// For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+		public IList<string> SummaryRanges(int[] nums)
+		{
+			List<string> ret = new List<string>();
+			if (nums == null || nums.Length == 0)
+				return ret;
+			int start = 0;
+			for (int i = 1; i < nums.Length; i++)
+			{
+				if (nums[i] - 1 > nums[i - 1])
+				{
+					StringBuilder sb = new StringBuilder();		
+					sb.Append(nums[start].ToString());
+					if (i - 1 > start)
+					{
+						sb.Append("->");
+						sb.Append(nums[i - 1].ToString());
+					}
+					ret.Add(sb.ToString());
+					start = i;
+				}
+			}
+			StringBuilder sb2 = new StringBuilder();
+			sb2.Append(nums[start].ToString());
+			if (start != nums.Length - 1)
+			{
+				sb2.Append("->");
+				sb2.Append(nums[nums.Length - 1].ToString());
+			}
+			ret.Add(sb2.ToString());
+			return ret;
+		}
+		                                  
+		// https://leetcode.com/problems/course-schedule/
+		public static bool CanFinish(int numCourses, int[,] prerequisites)
+		{
+			Course[] courses = new Course[numCourses];
+			for (int i = 0; i < numCourses; i++) {
+			
+				courses[i] = new Course(i);
+			}
+			for (int j = 0; j < prerequisites.GetLength(0); j++) {
+			
+				courses[prerequisites[j, 0]].Prerequisites.Add(courses[prerequisites[j, 1]]);
+			}
+			for (int k = 0; k < numCourses; k++) {
+			
+				if (!courses[k].canBeDone())
+					return false;
+			}
+			
+			return true;
+		}
+   	
+		// https://leetcode.com/problems/validate-binary-search-tree/
+		public bool IsValidBST(TreeNode root)
+		{
+			return IsValidBSTHelper(root, Int64.MinValue, Int64.MaxValue);
+		} 
+		
+		private bool IsValidBSTHelper(TreeNode node, long min, long max)
+		{
+			if (node == null)
+				return true;
+			if (node.val <= min || node.val >= max)
+				return false;
+			return IsValidBSTHelper(node.left, min, node.val) && IsValidBSTHelper(node.right, node.val, max);
+		}
+		
+		// not verified by oj
+		public bool IsValidBST2(TreeNode root)
+		{
+			return IsValidBSTHelper2(root, root.left);
+		}
+		
+		private bool IsValidBSTHelper2(TreeNode node, TreeNode prev)
+		{
+			if(node == null) return true;
+			if(!IsValidBSTHelper2(node.left, node.left == null? null : node.left.left)) return false;
+			if (prev != null && prev.val >= node.val)
+				return false;
+			prev = node;
+			return IsValidBSTHelper2(node.right, prev);
+		}
+		
+		bool IsValidBSTHelper(TreeNode node, bool isRightChild, int target)
+		{
+			if (node == null)
+				return true;
+			if (isRightChild && node.val < target)
+				return false;
+			if (!isRightChild && node.val > target)
+				return false;
+			return IsValidBSTHelper(node.left, false, node.val) && IsValidBSTHelper(node.right, true, node.val);
+		}
+    
 		// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-		public int FindMinInRotatedSortedArray(int[] nums) 
+		public int FindMinInRotatedSortedArray(int[] nums)
 		{
 			int ret = -1;
 			int l = 0;
 			int r = nums.Length - 1;
-			while(l < r)
-			{
-				if(nums[l] < nums[r])
+			while (l < r) {
+				if (nums[l] < nums[r])
 					return nums[l];
-				int mid = l + (r-l) / 2;
-				if(nums[l] > nums[mid])
-				{
+				int mid = l + (r - l) / 2;
+				if (nums[l] > nums[mid]) {
 					r = mid;
-				}
-				else
-				{
+				} else {
 					l = mid + 1;
 				}
 			}			
@@ -80,61 +237,106 @@ namespace InterviewQs
 			
 			return ret;
 		}
-           			
+		
+		//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+		public int MaxProfit2(int[] prices)
+		{
+			if (prices == null || prices.Length < 2) {
+				return 0;
+			}	
+			int allGain = 0;
+			int oneSell = 0;
+			int min = prices[0];
+			int max = prices[0];
+			for (int i = 1; i < prices.Length; i ++) {
+				if (prices[i] < min) {
+					allGain += oneSell;
+					oneSell = 0;
+					min = prices[i];
+					max = prices[i];
+				} else {
+					if (prices[i] > max) {
+						max = prices[i];
+						oneSell = max - min;
+					} else {
+						allGain += oneSell;
+						min = prices[i];
+						max = prices[i];
+						oneSell = 0;
+					}
+				}
+			}
+			
+			return allGain + oneSell;
+		}
+        
+		// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+		public int MaxProfit1(int[] prices)
+		{
+			if (prices == null || prices.Length < 2)
+				return 0;
+			int min = prices[0];
+			int max = prices[0];
+			int ret = 0;
+			for (int i = 1; i < prices.Length; i++) {
+				if (prices[i] < min) {
+					min = prices[i];
+					max = prices[i];
+				} else if (prices[i] > max) {
+					max = prices[i];
+					if (max - min > ret) {
+						ret = max - min;
+					}
+				}
+					
+			}
+			return ret;
+		}
 		
 		// https://leetcode.com/problems/search-in-rotated-sorted-array/
-		public int Search(int[] nums, int target) 
+		public int Search(int[] nums, int target)
 		{
 			int ret = -1;
-			if(nums == null || nums.Length == 0)
+			if (nums == null || nums.Length == 0)
 				return ret;
 			int left = 0;
 			int right = nums.Length - 1;
 			int minp = -1;
-			while(left < right)
-			{
-				if(nums[left] < nums[right])
-				{
+			while (left < right) {
+				if (nums[left] < nums[right]) {
 					break;
 				}
 				int mid = left + (right - left) / 2;
-				if(nums[left] > nums[mid])
-				{
+				if (nums[left] > nums[mid]) {
 					right = mid;
-				}
-				else
-				{
+				} else {
 					left = mid + 1;
 				}
 			}
 			
 			minp = left;
 			
-			if(target < nums[minp]) return -1;
+			if (target < nums[minp])
+				return -1;
 			ret = Bsearch(nums, 0, minp - 1, target);
-			if(ret >= 0)
-			{
+			if (ret >= 0) {
 				return ret;
 			}
 			
 			return Bsearch(nums, minp, nums.Length - 1, target);
-    	}	
+		}
 		
 		private int Bsearch(int[] array, int start, int end, int target)
 		{
 			int l = start;
 			int r = end;
-			while(l <= r)
-			{
+			while (l <= r) {
 				int mid = l + (r - l) / 2;
-				if(target == array[mid])
+				if (target == array[mid])
 					return mid;
-				if(target > array[mid])
-				{
+				if (target > array[mid]) {
 					l = mid + 1;
-				}
-				else
-				{
+				} else {
 					r = mid - 1;
 				}
 			}
@@ -146,26 +348,22 @@ namespace InterviewQs
 		public IList<Interval> Merge(IList<Interval> intervals)
 		{
 			IList<Interval> ret = new List<Interval>();
-			if(intervals == null || intervals.Count == 0)
-			{
+			if (intervals == null || intervals.Count == 0) {
 				return ret;
 			}
 			Interval[] array = new Interval[intervals.Count];
-			intervals.CopyTo(array,0);
+			intervals.CopyTo(array, 0);
 			Array.Sort(array, this.CompareByStart);
 			
 			ret.Add(array[0]);
-			for(int i = 1; i < array.Length; i ++)
-			{
-				Interval tmp = ret[ret.Count -1];
-				if(tmp.end < array[i].start)
-				{
+			for (int i = 1; i < array.Length; i++) {
+				Interval tmp = ret[ret.Count - 1];
+				if (tmp.end < array[i].start) {
 					ret.Add(array[i]);
 					continue;
 				}
 				
-				if(tmp.end >= array[i].start && tmp.end < array[i].end)
-				{
+				if (tmp.end >= array[i].start && tmp.end < array[i].end) {
 					tmp.end = array[i].end;
 				}
 			}
@@ -175,39 +373,37 @@ namespace InterviewQs
 		
 		private int CompareByStart(Interval a, Interval b)
 		{
-			if(a.start < b.start) return -1;
-			if(a.start > b.start) return 1;
+			if (a.start < b.start)
+				return -1;
+			if (a.start > b.start)
+				return 1;
 			return 0;
 		}
 		
 		// https://leetcode.com/problems/invert-binary-tree/
-		public TreeNode InvertTree(TreeNode root) 
+		public TreeNode InvertTree(TreeNode root)
 		{
-			if(root == null)
+			if (root == null)
 				return null;
 			TreeNode tmpl = InvertTree(root.left);
 			TreeNode tmpr = InvertTree(root.right);
 			root.left = tmpr;
 			root.right = tmpl;
 			return root;
-		}    
+		}
 		
 		// https://leetcode.com/problems/kth-largest-element-in-an-array/
 		public static int FindKthLargest(int[] nums, int k)
 		{
 			int start = 0;
 			int end = nums.Length - 1;
-			while (true)
-			{
+			while (true) {
 				int i = ArrayPartition(nums, start, end);
-				if(i + 1 == k)
+				if (i + 1 == k)
 					return nums[i];
-				if (i + 1 < k)
-				{
+				if (i + 1 < k) {
 					start = i + 1;
-				}
-				else
-				{
+				} else {
 					end = i - 1;
 				}
 			}
@@ -218,19 +414,15 @@ namespace InterviewQs
 			int tmp = nums[start];
 			int left = start + 1;
 			int right = end;
-			while (left <= right)
-			{
-				while (left < end && nums[left] >= tmp)
-				{
-					left ++;
+			while (left <= right) {
+				while (left < end && nums[left] >= tmp) {
+					left++;
 				}
-				while (right > start && nums[right] <= tmp)
-				{
+				while (right > start && nums[right] <= tmp) {
 					right--;
 				}
 				
-				if (left < right)
-				{
+				if (left < right) {
 					int a = nums[left];
 					nums[left] = nums[right];
 					nums[right] = a;
@@ -252,57 +444,49 @@ namespace InterviewQs
 			int overlap = 0;
 			int ol = Math.Min(G, C) - Math.Max(A, E);
 			int oh = Math.Min(H, D) - Math.Max(B, F);
-			if(ol > 0 && oh > 0)
-			{
+			if (ol > 0 && oh > 0) {
 				overlap = ol * oh;
 			}
 			return allArea - overlap;
-    	}		
+		}
 		
 		// https://leetcode.com/problems/count-complete-tree-nodes/
 		public int CountNodesRecursive(TreeNode root)
 		{
-			if(root == null)
+			if (root == null)
 				return 0;
 			int l = 1;
 			int r = 1;
 			TreeNode node = root.left;
-			while(node != null)
-			{
-				l ++;
+			while (node != null) {
+				l++;
 				node = node.left;
 			}
 			
 			node = root.right;
-			while(node != null)
-			{
-				r ++;
+			while (node != null) {
+				r++;
 				node = node.right;
 			}
-			if(l == r) return (int)Math.Pow(2, l) - 1;
+			if (l == r)
+				return (int)Math.Pow(2, l) - 1;
 			return 1 + CountNodesRecursive(root.left) + CountNodesRecursive(root.right);
 		}
 		
 		// https://leetcode.com/problems/contains-duplicate-ii/
-		public bool ContainsNearbyDuplicate(int[] nums, int k) 
+		public bool ContainsNearbyDuplicate(int[] nums, int k)
 		{
 			Dictionary<int, int> dict = new Dictionary<int, int>();
-			if(nums.Length < 2) return false;
-			for(int i = 0; i < nums.Length; i ++)
-			{
-				if(dict.ContainsKey(nums[i]))
-				{
-					if(i - dict[nums[i]] <= k)
-					{
+			if (nums.Length < 2)
+				return false;
+			for (int i = 0; i < nums.Length; i++) {
+				if (dict.ContainsKey(nums[i])) {
+					if (i - dict[nums[i]] <= k) {
 						return true;
-					}
-					else
-					{
+					} else {
 						dict[nums[i]] = i;
 					}
-				}
-				else
-				{
+				} else {
 					dict.Add(nums[i], i);
 				}
 			}
@@ -310,14 +494,14 @@ namespace InterviewQs
 		}
 		
 		// https://leetcode.com/problems/contains-duplicate/
-		public bool ContainsDuplicate(int[] nums) 
+		public bool ContainsDuplicate(int[] nums)
 		{
 		
 			HashSet<int> dict = new HashSet<int>();
-			if(nums.Length < 2) return false;
-			foreach(int num in nums)
-			{
-				if(dict.Contains(num))
+			if (nums.Length < 2)
+				return false;
+			foreach (int num in nums) {
+				if (dict.Contains(num))
 					return true;
 				dict.Add(num);
 			}
@@ -337,37 +521,27 @@ namespace InterviewQs
 			int end = 0;
 			int tmpSum = 0;
 			int minLen = nums.Length;
-			while (end < nums.Length && tmpSum < s)
-			{
+			while (end < nums.Length && tmpSum < s) {
 				tmpSum += nums[end++];
 			}
 			
-			if (end == nums.Length && tmpSum < s)
-			{
+			if (end == nums.Length && tmpSum < s) {
 				return 0;
 			}
 			
 			minLen = end - start < minLen ? end - start : minLen;
-			while (start < nums.Length)
-			{
-				if (tmpSum >= s)
-				{
-					tmpSum -= nums[start ++];
-				}
-				else
-				{
-					if (end < nums.Length)
-					{
-						tmpSum += nums[end ++];
-					}
-					else
-					{
+			while (start < nums.Length) {
+				if (tmpSum >= s) {
+					tmpSum -= nums[start++];
+				} else {
+					if (end < nums.Length) {
+						tmpSum += nums[end++];
+					} else {
 						return minLen;
 					}
 				}
 				
-				if (tmpSum >= s && end - start < minLen)
-				{
+				if (tmpSum >= s && end - start < minLen) {
 					minLen = end - start;	
 				}					
 			}
@@ -379,14 +553,13 @@ namespace InterviewQs
 		// https://leetcode.com/problems/reverse-linked-list/
 		ListNode reverseList(ListNode head)
 		{
-			if(head == null)
+			if (head == null)
 				return null;
 			ListNode newHead = head;
 			ListNode nextNode = head.next;
 			
 			newHead.next = null;
-			while(nextNode != null)
-			{
+			while (nextNode != null) {
 				ListNode tmp = nextNode;
 				nextNode = nextNode.next;
 				tmp.next = newHead;
@@ -398,18 +571,14 @@ namespace InterviewQs
 		
 		public static void PrintSet(int i)
 		{
-			if(i == 0) return;
-			for(int k = 0; k < Math.Pow(2,i); k ++)
-			{
+			if (i == 0)
+				return;
+			for (int k = 0; k < Math.Pow(2, i); k++) {
 				StringBuilder sb = new StringBuilder();
-				for(int m = i; m > 0; m --)
-				{
-					if((k & (1 << (m - 1))) > 0)
-					{
+				for (int m = i; m > 0; m--) {
+					if ((k & (1 << (m - 1))) > 0) {
 						sb.Append('T');
-					}
-					else
-					{
+					} else {
 						sb.Append('F');
 					}
 				}
@@ -423,14 +592,10 @@ namespace InterviewQs
 			ListNode dummyNode = new ListNode(0);
 			dummyNode.next = head;
 			ListNode cur = dummyNode;
-			while (cur != null)
-			{
-				if (cur.next != null && cur.next.val == val)
-				{
+			while (cur != null) {
+				if (cur.next != null && cur.next.val == val) {
 					cur.next = cur.next.next;
-				}
-				else
-				{
+				} else {
 					cur = cur.next;
 				}
 			}
@@ -444,25 +609,19 @@ namespace InterviewQs
 		// Minimum window is "BANC".
 		public static string MinWindow(string S, string T)
 		{
-			if (S.Length == 0 || T.Length == 0 || T.Length > S.Length)
-			{
+			if (S.Length == 0 || T.Length == 0 || T.Length > S.Length) {
 				return string.Empty;
 			}
             
 			Dictionary<char, int> expectedDict = new Dictionary<char, int>();
 			Dictionary<char, int> appearance = new Dictionary<char, int>();
-			foreach (char c in T)
-			{
-				if (!appearance.ContainsKey(c))
-				{
+			foreach (char c in T) {
+				if (!appearance.ContainsKey(c)) {
 					appearance.Add(c, 0);
 				}
-				if (expectedDict.ContainsKey(c))
-				{
+				if (expectedDict.ContainsKey(c)) {
 					expectedDict[c]++;
-				}
-				else
-				{
+				} else {
 					expectedDict.Add(c, 1);
 				}
 			}
@@ -471,30 +630,23 @@ namespace InterviewQs
 			int minStart = -1;
 			int minEnd = S.Length;
 			int count = 0;
-			for (int i = 0; i < S.Length; i++)
-			{
-				if (expectedDict.ContainsKey(S[i]))
-				{
+			for (int i = 0; i < S.Length; i++) {
+				if (expectedDict.ContainsKey(S[i])) {
 					appearance[S[i]]++;
                     
-					if (appearance[S[i]] <= expectedDict[S[i]])
-					{
+					if (appearance[S[i]] <= expectedDict[S[i]]) {
 						count++;
 					}
                     
-					if (count == T.Length)
-					{
-						while (!expectedDict.ContainsKey(S[start]) || appearance[S[start]] > expectedDict[S[start]])
-						{
+					if (count == T.Length) {
+						while (!expectedDict.ContainsKey(S[start]) || appearance[S[start]] > expectedDict[S[start]]) {
                         
-							if (appearance.ContainsKey(S[start]))
-							{
+							if (appearance.ContainsKey(S[start])) {
 								appearance[S[start]]--;
 							}
 							start++;
 						}
-						if (i - start < minEnd - minStart)
-						{
+						if (i - start < minEnd - minStart) {
 							minStart = start;
 							minEnd = i;
 						}
@@ -515,25 +667,21 @@ namespace InterviewQs
 				return 0;
 			HashSet<int> dict = new HashSet<int>(num);
 			int maxLength = 1;
-			foreach (int k in num)
-			{
+			foreach (int k in num) {
 				int count = 1;
 				int m = k;
-				while (dict.Contains(m + 1))
-				{
+				while (dict.Contains(m + 1)) {
 					count++;
 					dict.Remove(m);
 					m = m + 1;
 				}
 				m = k;
-				while (dict.Contains(m - 1))
-				{
+				while (dict.Contains(m - 1)) {
 					count++;
 					dict.Remove(m);
 					m = m - 1;
 				}
-				if (count > maxLength)
-				{
+				if (count > maxLength) {
 					maxLength = count;
 				}
 			}
@@ -543,27 +691,21 @@ namespace InterviewQs
 		public static IList<int> PreorderTraversal(TreeNode root)
 		{
 			IList<int> ret = new List<int>();
-			if (root == null)
-			{
+			if (root == null) {
 				return ret;
 			}    
             
 			Stack<TreeNode> stk = new Stack<TreeNode>();
             
-			while (root != null)
-			{
+			while (root != null) {
 				ret.Add(root.val);                
-				if (root.right != null)
-				{
+				if (root.right != null) {
 					stk.Push(root.right);
 				}
                 
-				if (root.left != null)
-				{
+				if (root.left != null) {
 					root = root.left;
-				}
-				else
-				{
+				} else {
 					root = stk.Count != 0 ? stk.Pop() : null;
 				}
 			}            
@@ -579,30 +721,23 @@ namespace InterviewQs
 			int listIndex = 0;
 			Queue<int> spacePos = new Queue<int>();
 			StringBuilder currentLine = new StringBuilder();
-			while (listIndex < words.Count)
-			{
-				if (currentLine.Length != 0)
-				{
+			while (listIndex < words.Count) {
+				if (currentLine.Length != 0) {
 					currentLine.Append(" ");
 				}
 				string lastWord = words[listIndex];
 				currentLine.Append(lastWord);
-				if (currentLine.Length == L)
-				{
+				if (currentLine.Length == L) {
 					ret.Add(currentLine.ToString());
 					currentLine.Clear();
 					spacePos.Clear();
-				}
-				else if (currentLine.Length > L)
-				{
+				} else if (currentLine.Length > L) {
 					currentLine.Remove(currentLine.Length - lastWord.Length - 1, lastWord.Length + 1);
 					int spaceNeeded = L - currentLine.Length;
 					int spaceAdded = 0;
-					while (spaceNeeded > 0)
-					{
+					while (spaceNeeded > 0) {
 						int spaceNum = spaceNeeded;
-						if (spacePos.Count > 1)
-						{
+						if (spacePos.Count > 1) {
 							spaceNum = spaceNeeded % (spacePos.Count - 1) == 0 ? spaceNeeded / (spacePos.Count - 1) : spaceNeeded / (spacePos.Count - 1) + 1;
 						}
 						currentLine.Insert(spacePos.Dequeue() + spaceAdded, " ", spaceNum);
@@ -613,19 +748,13 @@ namespace InterviewQs
 					listIndex -= 1;
 					currentLine.Clear();
 					spacePos.Clear();
-				}
-				else if (currentLine.Length < L)
-				{
-					if (listIndex == words.Count - 1)
-					{
-						while (currentLine.Length < L)
-						{
+				} else if (currentLine.Length < L) {
+					if (listIndex == words.Count - 1) {
+						while (currentLine.Length < L) {
 							currentLine.Append(" ");
 						}
 						ret.Add(currentLine.ToString());
-					}
-					else
-					{
+					} else {
 						spacePos.Enqueue(currentLine.Length);
 					}
 				}
