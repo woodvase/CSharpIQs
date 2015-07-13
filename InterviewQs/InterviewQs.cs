@@ -51,6 +51,32 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/palindrome-linked-list/
+		public bool IsPalindrome(ListNode head)
+		{
+			if (head == null)
+				return true;
+			ListNode node = head.next;
+			ListNode reversedHead = new ListNode(head.val);
+			reversedHead.next = null;
+			
+			while (node != null) {
+				ListNode newNode = new ListNode(node.val);
+				newNode.next = reversedHead;
+				reversedHead = newNode;
+				node = node.next;
+			}
+			node = head;
+			while (reversedHead != null) {
+				if (reversedHead.val != node.val) {
+					return false;
+				}
+				reversedHead = reversedHead.next;
+				node = node.next;
+			}
+			return true;
+		}
+		
 		// https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 		public int KthSmallest_Solution2(TreeNode root, int k)
 		{
