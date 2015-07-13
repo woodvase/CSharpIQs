@@ -51,6 +51,23 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+		public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+		{
+			if (root == null)
+				return null;
+			if (root.val == p.val || root.val == q.val)
+				return root;
+			if (root.val > Math.Min(p.val, q.val) && root.val < Math.Max(p.val, q.val)) {
+				return root;
+			}
+			if (root.val > Math.Max(p.val, q.val)) {
+				return LowestCommonAncestor(root.left, p, q);
+			} else {
+				return LowestCommonAncestor(root.right, p, q);
+			}
+		}
+		
 		// https://leetcode.com/problems/palindrome-linked-list/
 		public bool IsPalindrome(ListNode head)
 		{
