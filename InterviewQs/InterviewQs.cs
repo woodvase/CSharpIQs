@@ -16,8 +16,9 @@ namespace InterviewQs
 	{
 		public static void Main(string[] args)
 		{
-			// TODO: Implement Functionality Here
-			Console.WriteLine(FindOrder(2, new int[,]{ { 1, 0 }, { 0, 1 } }));
+            // TODO: Implement Functionality Here
+            CombinationSum3(3, 9);
+            Console.WriteLine(FindOrder(2, new int[,]{ { 1, 0 }, { 0, 1 } }));
 			Console.WriteLine(CanFinish(2, new int[,]{ { 1, 0 }, { 0, 1} }));
 			Console.WriteLine(FindKthLargest(new int[]{ 7, 6, 5, 4, 3, 2, 1 }, 5));
 			
@@ -50,9 +51,42 @@ namespace InterviewQs
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
-		
-		// https://leetcode.com/problems/search-a-2d-matrix-ii/
-		public bool SearchMatrixII(int[,] matrix, int target)
+
+        // https://leetcode.com/problems/combination-sum-iii/
+        static public IList<IList<int>> CombinationSum3(int k, int n)
+        {
+            List<IList<int>> ret = new List<IList<int>>();
+            if (k <= 0 || k > 9)
+                return ret;
+            IList<int> cur = new List<int>();
+            CombinationSum3Helper(ret, cur, 1, k, n);
+            return ret;
+        }
+
+        static public void CombinationSum3Helper(IList<IList<int>> lists, IList<int> current, int start, int k, int n)
+        {
+            if (k == 1)
+            {
+                if (n >= start && n <= 9)
+                {
+                    current.Add(n);
+                    lists.Add(new List<int>(current));
+                    current.RemoveAt(current.Count - 1);
+                }
+            }
+            else
+            {
+                for (int i = start; i <= 9 - k + 1; i++)
+                {
+                    current.Add(i);
+                    CombinationSum3Helper(lists, current, i + 1, k - 1, n - i);
+                    current.RemoveAt(current.Count - 1);
+                }
+            }
+        }
+
+        // https://leetcode.com/problems/search-a-2d-matrix-ii/
+        public bool SearchMatrixII(int[,] matrix, int target)
 		{
 			if (matrix == null)
 				return false;
