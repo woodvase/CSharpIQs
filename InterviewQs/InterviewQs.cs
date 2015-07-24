@@ -51,6 +51,30 @@ namespace InterviewQs
 			Console.ReadKey(true);
 		}
 		
+		// https://leetcode.com/problems/search-a-2d-matrix-ii/
+		public bool SearchMatrixII(int[,] matrix, int target)
+		{
+			if (matrix == null)
+				return false;
+			int m = matrix.GetLength(0);
+			int n = matrix.GetLength(1);
+			if (target < matrix[0, 0] || target > matrix[m - 1, n - 1])
+				return false;
+			int row = 0;
+			int col = n - 1;
+			while (row < m && col >= 0) {
+				if (target == matrix[row, col])
+					return true;
+				if (target > matrix[row, col]) {
+					row++;
+				} else {
+					col--;
+				}
+			}
+			
+			return false;
+		}
+		
 		// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 		public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
 		{
