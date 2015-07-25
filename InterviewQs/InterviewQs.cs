@@ -17,6 +17,7 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
             // TODO: Implement Functionality Here
+            Console.WriteLine(FibonacciSequenceII(16));
             CombinationSum3(3, 9);
             Console.WriteLine(FindOrder(2, new int[,]{ { 1, 0 }, { 0, 1 } }));
 			Console.WriteLine(CanFinish(2, new int[,]{ { 1, 0 }, { 0, 1} }));
@@ -51,6 +52,29 @@ namespace InterviewQs
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
+
+        static public int FibonacciSequenceII(int n)
+        {
+            if (n == 0 || n == 1) return n;
+            return FibonacciSequenceII(n - 1) + FibonacciSequenceII(n - 2);
+        }
+
+        static public int FibonacciSequenceI(int n)
+        {
+            if (n == 0 || n == 1) return 0;
+            int pre2 = 0;
+            int pre1 = 1;
+            int i = 2;
+            while (i <= n)
+            {
+                int fi = pre1 + pre2;
+                pre2 = pre1;
+                pre1 = fi;
+                i++;
+            }
+
+            return pre1;
+        }
 
         // https://leetcode.com/problems/combination-sum-iii/
         static public IList<IList<int>> CombinationSum3(int k, int n)
