@@ -17,6 +17,7 @@ namespace InterviewQs
 		public static void Main(string[] args)
 		{
             // TODO: Implement Functionality Here
+            FactorCombination(12);
             CombinationSum3(3, 9);
             Console.WriteLine(FindOrder(2, new int[,]{ { 1, 0 }, { 0, 1 } }));
 			Console.WriteLine(CanFinish(2, new int[,]{ { 1, 0 }, { 0, 1} }));
@@ -51,6 +52,43 @@ namespace InterviewQs
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
+
+        //Print all unique combination of factors(except 1) of a given number.
+        //For example:
+        //Input: 12
+        //Output: [[2, 2, 3], [2, 6], [3, 4]]
+        //Input: 15
+        //Output: [[3, 5]]
+        //Input: 28
+        //Output: [[2, 2, 7], [2, 14], [4, 7]]
+        static public List<List<int>> FactorCombination(int num)
+        {
+            List<List<int>> ret = new List<List<int>>();
+            if (num < 2)
+                return ret;
+            List<int> cur = new List<int>();
+            FactorCombinationHelper(num, ret, cur);
+            return ret;
+        }
+
+        static public void FactorCombinationHelper(int num, List<List<int>> combinations, List<int> combination)
+        {
+            for (int i = combination.Count == 0 ? 2 : combination[combination.Count - 1]; i < num; i++)
+            {
+                if (num % i == 0)
+                {
+                    combination.Add(i);
+                    FactorCombinationHelper(num / i, combinations, combination);
+                    combination.RemoveAt(combination.Count - 1);
+                }
+            }
+            if (combination.Count > 0 && num > combination[combination.Count - 1])
+            {
+                combination.Add(num);
+                combinations.Add(new List<int>(combination));
+                combination.RemoveAt(combination.Count - 1);
+            }
+        }
 
         // https://leetcode.com/problems/combination-sum-iii/
         static public IList<IList<int>> CombinationSum3(int k, int n)
