@@ -54,6 +54,24 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/maximum-subarray/
+        public int MaxSubArray(int[] nums)
+        {
+            if (nums == null || nums.Length == 0)
+                return Int32.MinValue;
+            int tmp = nums[0];
+            int max = tmp;
+            for (int i = 1; i < nums.Length; i++)
+            {
+                int curMax = Math.Max(nums[i], nums[i] + tmp);
+                if (curMax > max)
+                    max = curMax;
+                tmp = curMax;
+            }
+
+            return max;
+        }
+
         //Print all unique combination of factors(except 1) of a given number.
         //For example:
         //Input: 12
