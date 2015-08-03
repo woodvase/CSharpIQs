@@ -17,6 +17,15 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            List<int> ab = MergeSortedListsWithoutDup(new List<int> { 8, 8, 8 }, new List<int> { 3, 3 });
+            Console.WriteLine("Merged list start.");
+            foreach (int i in ab)
+            {
+                Console.Write(i);
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Merged list end.");
             FactorCombination(12);
             Console.WriteLine(FibonacciSequenceII(16));
             CombinationSum3(3, 9);
@@ -52,6 +61,69 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        static public List<int> MergeSortedListsWithoutDup(List<int> a, List<int> b)
+        {
+            // Merge
+            int la = 0;
+            int lb = 0;
+            List<int> newList = new List<int>();
+            while (la < a.Count && lb < b.Count)
+            {
+                if (a[la] < b[lb])
+                {
+                    newList.Add(a[la]);
+                    la++;
+                }
+                else
+                {
+                    newList.Add(b[lb]);
+                    lb++;
+                }
+            }
+
+            if (la < a.Count)
+            {
+                List<int> restA= a.GetRange(la, a.Count - la);
+                newList.AddRange(restA);
+            }
+
+            if (lb < b.Count)
+            {
+                List<int> restB = b.GetRange(lb, b.Count - lb);
+                newList.AddRange(restB);
+            }
+
+            // Dedup
+            return DeDup(newList);          
+        }
+
+        static public List<int> DeDup(List<int> list)
+        {
+            if (list.Count == 0)
+                return new List<int>();
+            int[] tmp = list.ToArray();
+
+            int pre = tmp[0];
+            int index = 1;
+            for (int i = 1; i < tmp.Length; i++)
+            {
+                if (tmp[i] != pre)
+                {
+                    tmp[index] = tmp[i];
+                    pre = tmp[i];
+                    index++;
+                }
+            }
+
+            List<int> ret = new List<int>();
+            for (int i = 0; i < index; i++)
+            {
+                ret.Add(tmp[i]);
+            }
+
+            return ret;
         }
 
         // https://leetcode.com/problems/maximum-subarray/
