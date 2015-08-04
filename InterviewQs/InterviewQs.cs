@@ -104,7 +104,6 @@ namespace InterviewQs
             if (s == null || t == null) return false;
             if (s.Length != t.Length) return false;
             int[] chars = new int[26];
-            int[] chart = new int[26];
             foreach (char c in s)
             {
                 chars[c - 'a'] += 1;
@@ -112,12 +111,12 @@ namespace InterviewQs
 
             foreach (char c in t)
             {
-                chart[c - 'a'] += 1;
+                chars[c - 'a'] -= 1;
             }
 
             for (int i = 0; i < chars.Length; i++)
             {
-                if (chars[i] != chart[i])
+                if (chars[i] != 0)
                     return false;
             }
 
