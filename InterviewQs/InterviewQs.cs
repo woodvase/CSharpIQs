@@ -63,6 +63,67 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/anagrams/
+        public IList<string> Anagrams(string[] strs)
+        {
+            List<string> ret = new List<string>();
+            if (strs == null || strs.Length == 0)
+                return ret;
+            Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+            foreach (string s in strs)
+            {
+                char[] a = s.ToCharArray();
+                Array.Sort(a);
+                string sorted = new string(a);
+                if (dict.ContainsKey(sorted))
+                {
+                    dict[sorted].Add(s);
+                }
+                else
+                {
+                    List<string> list = new List<string>();
+                    list.Add(s);
+                    dict.Add(sorted, list);
+                }
+            }
+
+            foreach (KeyValuePair<string, List<string>> kvp in dict)
+            {
+                if (kvp.Value.Count > 1)
+                {
+                    ret.AddRange(kvp.Value);
+                }
+            }
+
+            return ret;
+        }
+
+        // https://leetcode.com/problems/valid-anagram/
+        public bool IsAnagram(string s, string t)
+        {
+            if (s == null || t == null) return false;
+            if (s.Length != t.Length) return false;
+            int[] chars = new int[26];
+            int[] chart = new int[26];
+            foreach (char c in s)
+            {
+                chars[c - 'a'] += 1;
+            }
+
+            foreach (char c in t)
+            {
+                chart[c - 'a'] += 1;
+            }
+
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (chars[i] != chart[i])
+                    return false;
+            }
+
+            return true;
+        }
+
         static public List<int> MergeSortedListsWithoutDup(List<int> a, List<int> b)
         {
             // Merge
