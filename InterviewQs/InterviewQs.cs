@@ -17,6 +17,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            Console.WriteLine(Multiply("124", "0"));
             Console.WriteLine(CalculateSum("1*1+1-1*3"));
             List<int> ab = MergeSortedListsWithoutDup(new List<int> { 8, 8, 8 }, new List<int> { 3, 3 });
             Console.WriteLine("Merged list start.");
@@ -62,6 +63,93 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        // https://leetcode.com/problems/multiply-strings/
+        // // "13" * "11"
+        public static string Multiply(string num1, string num2)
+        {
+            string snum = num1.Length > num2.Length ? num2 : num1;
+            string lnum = num1.Length > num2.Length ? num1 : num2;
+            string ret = string.Empty;
+            for (int i = 0; i < snum.Length; i ++)
+            {
+                string cur = string.Empty;
+                int m = 0;
+                while (m < (snum[i] - '0'))
+                {
+                    cur = AddString(cur, lnum);
+                    m++;
+                }
+                ret = AddString(new StringBuilder(ret).Append('0').ToString(), cur);
+            }
+
+            return ret;
+        }
+
+        public static string AddString(string num1, string num2)
+        {
+            int l1 = num1.Length - 1;
+            int l2 = num2.Length - 1;
+            if (num1.Length == 0 && num2.Length == 0)
+                return string.Empty;
+            if (num1.Length == 0)
+                return num2;
+            if (num2.Length == 0)
+                return num1;
+            int carryBit = 0;
+            StringBuilder sb = new StringBuilder();
+            while (l1 >= 0 && l2 >= 0)
+            {
+                int i1 = num1[l1--] - '0';
+                int i2 = num2[l2--] - '0';
+                int bitSum = i1 + i2 + carryBit;
+                if (bitSum >= 10)
+                {
+                    carryBit = 1;
+                    sb.Insert(0, (char)(bitSum - 10 + '0'));
+                }
+                else
+                {
+                    carryBit = 0;
+                    sb.Insert(0, (char)(bitSum + '0'));
+                }
+            }
+
+            string num;
+            int l;
+            if (l1 >= 0)
+            {
+                num = num1;
+                l = l1;
+            }
+            else
+            {
+                num = num2;
+                l = l2;
+            }
+
+            while (l >= 0)
+            {
+                int i = num[l --] - '0' + carryBit;
+                if (i >= 10)
+                {
+                    sb.Insert(0, (char)(i - 10 + '0'));
+                    carryBit = 1;
+                }
+                else
+                {
+                    sb.Insert(0, (char)(i + '0'));
+                    carryBit = 0;
+                }
+            }
+
+            if (carryBit == 1)
+            {
+                sb.Insert(0, '1');
+            }
+
+            return sb.ToString();
         }
 
         static public int CalculateSum(string s)
