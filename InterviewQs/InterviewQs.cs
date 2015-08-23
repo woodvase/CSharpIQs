@@ -17,6 +17,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            Console.WriteLine(CalculateSum("1*1+1-1*3"));
             List<int> ab = MergeSortedListsWithoutDup(new List<int> { 8, 8, 8 }, new List<int> { 3, 3 });
             Console.WriteLine("Merged list start.");
             foreach (int i in ab)
@@ -61,6 +62,68 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        static public int CalculateSum(string s)
+        {
+            Stack<string> stk = new Stack<string>();
+            StringBuilder currentNum = new StringBuilder();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] >= '0' && s[i] <= '9')
+                {
+                    currentNum.Append(s[i]);
+                }
+                else if (s[i] == '+' || s[i] == '-')
+                {
+                    stk.Push(currentNum.ToString());
+                    stk.Push(s[i].ToString());
+                    currentNum.Clear();
+                }
+                else if (s[i] == '*' || s[i] == '\\')
+                {
+                    char csign = s[i];
+                    int j = int.Parse(currentNum.ToString());
+                    i++;
+                    int num = 0;
+                    while (i < s.Length && s[i] >= '0' && s[i] <= '9')
+                    {
+                        num = num * 10 + s[i ++] - '0';
+                    }
+
+                    // i is not the end and s[i] is one of + - * /
+                    if (i < s.Length)
+                    {
+                        i--;
+                    }
+                    if (csign == '*')
+                    {
+                        currentNum = new StringBuilder((j * num).ToString());
+                    }
+                    else
+                    {
+                        currentNum = new StringBuilder((j / num).ToString());
+                    }
+                }
+            }
+
+            stk.Push(currentNum.ToString());
+            while (stk.Count > 1)
+            {
+                int m = int.Parse(stk.Pop());
+                string sign = stk.Pop();
+                int n = int.Parse(stk.Pop());
+                if (sign.Equals("+"))
+                {
+                    stk.Push((m + n).ToString());
+                }
+                else
+                {
+                    stk.Push((n-m).ToString());
+                }
+            }
+
+            return int.Parse(stk.Pop());
         }
 
         // https://leetcode.com/problems/anagrams/
