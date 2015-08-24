@@ -65,9 +65,52 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
-        // https://leetcode.com/problems/multiply-strings/
-        // // "13" * "11"
-        public static string Multiply(string num1, string num2)
+        // https://leetcode.com/problems/reverse-nodes-in-k-group/
+        // Given this linked list: dummy->1->2
+        // For k = 2, you should return: 2->1->4->3->5
+        // For k = 3, you should return: 3->2->1->4->5
+        public ListNode ReverseKGroup(ListNode head, int k)
+        {
+            if (head == null || k == 1) return head;
+            ListNode dummy = new ListNode(-1);
+            dummy.next = head;
+            ListNode khead = dummy;
+            ListNode kend = head;
+            int i = 1;
+            while (kend != null)
+            {
+                kend = kend.next;
+                i++;
+                if (i % k == 0 && kend != null)
+                {
+                    ListNode knext = khead.next;
+                    khead.next = kend;
+                    khead = knext;
+                    while (khead != kend)
+                    {
+                        knext = khead.next;
+                        khead.next = kend.next;
+                        kend.next = khead;
+                        khead = knext;
+                    }
+                    // dummy -> 2(kend, khead)->1->3->4->5
+                    int m = k;
+                    while (m > 1)
+                    {
+                        kend = kend.next;
+                        m--;
+                    }
+                    khead = kend;
+                    // dummy -> 2 ->1 (khead, kend) -> 3 -> 4 -> 5
+                }
+            }
+
+            return dummy.next;
+        }
+
+    // https://leetcode.com/problems/multiply-strings/
+    // // "13" * "11"
+    public static string Multiply(string num1, string num2)
         {
             string snum = num1.Length > num2.Length ? num2 : num1;
             string lnum = num1.Length > num2.Length ? num1 : num2;
