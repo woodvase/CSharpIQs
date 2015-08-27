@@ -65,6 +65,20 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/ugly-number/
+        public bool IsUgly(int num)
+        {
+            if (num <= 0) return false;
+            if (num == 1) return true;
+            if (num % 2 == 0)
+                return IsUgly(num / 2);
+            if (num % 3 == 0)
+                return IsUgly(num / 3);
+            if (num % 5 == 0)
+                return IsUgly(num / 5);
+            return false;
+        }
+
         // https://leetcode.com/problems/add-digits/
         public int AddDigits(int num)
         {
@@ -76,6 +90,7 @@ namespace InterviewQs
                 tmp += num % 10;
                 num = num / 10;
             }
+            return AddDigits(tmp);
         }
 
         // https://leetcode.com/problems/binary-tree-paths/
