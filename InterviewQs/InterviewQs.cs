@@ -65,6 +65,42 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/binary-tree-paths/
+        public IList<string> BinaryTreePaths(TreeNode root)
+        {
+            List<string> ret = new List<string>();
+            if (root == null)
+                return ret;
+            StringBuilder sb = new StringBuilder();
+            BinaryTreePathsHelper(root, ret, sb);
+            return ret;
+        }
+
+        private void BinaryTreePathsHelper(TreeNode node, List<string> paths, StringBuilder path)
+        {
+            if (path.Length > 0)
+            {
+                path.Append("->");
+            }
+            path.Append(node.val.ToString());
+            if (node.left == null && node.right == null)
+            {
+                paths.Add(path.ToString());
+            }
+            else
+            {
+                StringBuilder tmp = new StringBuilder(path.ToString());
+                if (node.left != null)
+                {
+                    BinaryTreePathsHelper(node.left, paths, path);
+                }
+                if (node.right != null)
+                {
+                    BinaryTreePathsHelper(node.right, paths, tmp);
+                }
+            }
+        }
+
         // https://leetcode.com/problems/reverse-nodes-in-k-group/
         // Given this linked list: dummy->1->2
         // For k = 2, you should return: 2->1->4->3->5
