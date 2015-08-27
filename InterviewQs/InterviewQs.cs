@@ -65,6 +65,19 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/add-digits/
+        public int AddDigits(int num)
+        {
+            if (num >= 0 && num <= 9)
+                return num;
+            int tmp = 0;
+            while (num > 0)
+            {
+                tmp += num % 10;
+                num = num / 10;
+            }
+        }
+
         // https://leetcode.com/problems/binary-tree-paths/
         public IList<string> BinaryTreePaths(TreeNode root)
         {
