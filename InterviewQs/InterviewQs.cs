@@ -121,12 +121,15 @@ namespace InterviewQs
         }
 
         // https://leetcode.com/problems/happy-number/
-        public bool IsHappy(int n)
+        public bool IsHappyHelper(int n, HashSet<int> set)
         {
             if (n <= 0)
                 return false;
             if (n == 1)
                 return true;
+            if (set.Contains(n))
+                return false;
+            set.Add(n);
             int tmp = 0;
             while (n > 0)
             {
@@ -134,7 +137,12 @@ namespace InterviewQs
                 tmp += x * x;
                 n = n / 10;
             }
-            return IsHappy(tmp);
+            return IsHappyHelper(tmp, set);
+        }
+        public bool IsHappy(int n)
+        {
+            HashSet<int> visitedNumber = new HashSet<int>();
+            return IsHappyHelper(n, visitedNumber);
         }
 
         public int MissingNumber(int[] nums)
