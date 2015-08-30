@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -63,6 +64,95 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        // https://leetcode.com/problems/sort-list/
+        public ListNode SortList(ListNode head)
+        {
+            if (head == null || head.next == null) return head;
+            ListNode prev = head;
+            ListNode fast = head;
+            ListNode slow = head;
+            while (fast != null && fast.next != null)
+            {
+                prev = slow;
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+
+            prev.next = null;
+
+            ListNode firstHalf = SortList(head);
+            ListNode secondHarf = SortList(slow);
+            return MergeSortedList(firstHalf, secondHarf);
+        }
+
+        ListNode MergeSortedList(ListNode l1, ListNode l2)
+        {
+            ListNode dummy = new ListNode(0);
+            ListNode p1 = l1;
+            ListNode p2 = l2;
+            ListNode p = dummy;
+            while (p1 != null && p2 != null)
+            {
+                if (p1.val > p2.val)
+                {
+                    p.next = p2;
+                    p2 = p2.next;
+                }
+                else
+                {
+                    p.next = p1;
+                    p1 = p1.next;
+                }
+                p = p.next;
+            }
+
+            if (p1 != null)
+            {
+                p.next = p1;
+            }
+            if (p2 != null)
+            {
+                p.next = p2;
+            }
+
+            return dummy.next;
+        }
+
+        // https://leetcode.com/problems/happy-number/
+        public bool IsHappy(int n)
+        {
+            if (n <= 0)
+                return false;
+            if (n == 1)
+                return true;
+            int tmp = 0;
+            while (n > 0)
+            {
+                int x = n % 10;
+                tmp += x * x;
+                n = n / 10;
+            }
+            return IsHappy(tmp);
+        }
+
+        public int MissingNumber(int[] nums)
+        {
+            BitArray ba = new BitArray(nums.Length + 1);
+            foreach (int n in nums)
+                ba.Set(n, true);
+            int i = 0;
+            foreach (bool bit in ba)
+            {
+                if (!bit)
+                {
+                    break;
+                }
+                i++;
+            }
+
+            return i;
         }
 
         // https://leetcode.com/problems/ugly-number/
