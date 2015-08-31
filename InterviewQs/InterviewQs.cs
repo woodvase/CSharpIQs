@@ -78,23 +78,17 @@ namespace InterviewQs
             int right = matrix.GetLength(1);
             while ((top < bottom) && (left < right))
             {
-                if (top < bottom)
+                for (int i = left; i < right; i++)
                 {
-                    for (int i = left; i < right; i++)
-                    {
-                        ret.Add(matrix[top, i]);
-                    }
-                    top++;
+                    ret.Add(matrix[top, i]);
                 }
+                top++;
 
-                if (left < right)
+                for (int i = top; i < bottom; i++)
                 {
-                    for (int i = top; i < bottom; i++)
-                    {
-                        ret.Add(matrix[i, right - 1]);
-                    }
-                    right--;
+                    ret.Add(matrix[i, right - 1]);
                 }
+                right--;
 
                 if (top < bottom)
                 {
