@@ -18,6 +18,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            Console.WriteLine(NumberToWords(103));
             Console.WriteLine(Multiply("124", "0"));
             Console.WriteLine(CalculateSum("1*1+1-1*3"));
             List<int> ab = MergeSortedListsWithoutDup(new List<int> { 8, 8, 8 }, new List<int> { 3, 3 });
@@ -66,6 +67,76 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/integer-to-english-words/
+        public static string NumberToWords(int num)
+        {
+            string[] ZeroToNine = { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
+            string[] TenToNinteen = { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+            string[] TwentyToNinety = { "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
+            StringBuilder sb = new StringBuilder();
+            if (num >= 1000000000)
+            {
+                return HandleNumber(sb, "Billion", num, 1000000000);
+            }
+
+            if (num >= 1000000)
+            {
+                return HandleNumber(sb, "Million", num, 1000000);          
+            }
+
+            if (num >= 1000)
+            {
+                return HandleNumber(sb, "Thousand", num, 1000);
+            }
+
+            if (num >= 100)
+            {
+                return HandleNumber(sb, "Hundred", num, 100);
+            }
+
+            if (num >= 20 && num <= 99)
+            {
+                int d = num / 10;
+                int r = num % 10;
+                sb.Append(TwentyToNinety[d - 2]);
+                if (r > 0)
+                {
+                    sb.Append(" ");
+                    sb.Append(ZeroToNine[r]);
+                }
+                return sb.ToString();
+            }
+
+            if (num >= 10 && num <= 19)
+            {
+                return TenToNinteen[num - 10];
+            }
+
+            if (num >= 0 && num <= 9)
+            {
+                return sb.Append(ZeroToNine[num]).ToString();
+            }
+
+            return string.Empty;
+        }
+
+        private static string HandleNumber(StringBuilder sb, string unitstr, int num, int unit)
+        {
+            int d = num / unit;
+            int r = num % unit;
+            sb.Append(NumberToWords(d));
+            sb.Append(" ");
+            sb.Append(unitstr);
+            if (r > 0)
+            {
+                sb.Append(" ");
+                sb.Append(NumberToWords(r));
+            }
+            return sb.ToString();
+        }
+
+        
         // https://leetcode.com/problems/sort-list/
         public ListNode SortList(ListNode head)
         {
