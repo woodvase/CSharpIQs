@@ -135,7 +135,6 @@ namespace InterviewQs
             }
             return sb.ToString();
         }
-
         
         // https://leetcode.com/problems/sort-list/
         public ListNode SortList(ListNode head)
