@@ -18,6 +18,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            SpiralOrder(new int[,] { { 2, 3, 4 } });
             Console.WriteLine(NumberToWords(103));
             Console.WriteLine(Multiply("124", "0"));
             Console.WriteLine(CalculateSum("1*1+1-1*3"));
@@ -66,6 +67,78 @@ namespace InterviewQs
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
         }
+
+        // https://leetcode.com/problems/spiral-matrix/
+        public static IList<int> SpiralOrder(int[,] matrix)
+        {
+            IList<int> ret = new List<int>();
+            int top = 0;
+            int bottom = matrix.GetLength(0);
+            int left = 0;
+            int right = matrix.GetLength(1);
+            while ((top < bottom) && (left < right))
+            {
+                if (top < bottom)
+                {
+                    for (int i = left; i < right; i++)
+                    {
+                        ret.Add(matrix[top, i]);
+                    }
+                    top++;
+                }
+
+                if (left < right)
+                {
+                    for (int i = top; i < bottom; i++)
+                    {
+                        ret.Add(matrix[i, right - 1]);
+                    }
+                    right--;
+                }
+
+                if (top < bottom)
+                {
+                    for (int i = right - 1; i >= left; i--)
+                    {
+                        ret.Add(matrix[bottom - 1, i]);
+                    }
+                    bottom--;
+                }
+
+                if (left < right)
+                {
+                    for (int i = bottom - 1; i >= top; i--)
+                    {
+                        ret.Add(matrix[i, left]);
+                    }
+                    left++;
+                }
+            }
+
+            return ret;
+        }
+
+        public int[] SingleNumber(int[] nums)
+        {
+            HashSet<int> s = new HashSet<int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (!s.Contains(nums[i]))
+                {
+                    s.Add(nums[i]);
+                }
+                else
+                {
+                    s.Remove(nums[i]);
+                }
+            }
+
+            int[] ret = new int[2];
+            int k = 0;
+            foreach (int i in s)
+                ret[k++] = i;
+            return ret;
+         }
 
         // https://leetcode.com/problems/integer-to-english-words/
         public static string NumberToWords(int num)
