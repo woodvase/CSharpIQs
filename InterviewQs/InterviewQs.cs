@@ -118,6 +118,7 @@ namespace InterviewQs
             return ret;
         }
 
+        // Not using bit manipulation!
         public int[] SingleNumber(int[] nums)
         {
             HashSet<int> s = new HashSet<int>();
