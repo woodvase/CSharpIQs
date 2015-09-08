@@ -68,6 +68,49 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/first-bad-version/
+        public int FirstBadVersion(int n)
+        {
+            int badVer = 0;
+            int left = 1;
+            int right = n;
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+                if (IsBadVersion(mid))
+                {
+                    badVer = mid;
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+                
+            }
+
+            return badVer;
+        }
+
+        // Just to avoid compiler error
+        bool IsBadVersion(int version)
+        {
+            return (version / 2 == 0);
+        }
+
+        // https://leetcode.com/problems/h-index/
+        public int HIndex(int[] citations)
+        {
+            int ret = 0;
+            Array.Sort(citations);
+            for (int i = 0; i < citations.Length; i++)
+            {
+                ret = Math.Max(ret, Math.Min(citations[i], citations.Length - i));
+            }
+
+            return ret;
+        }
+
         // https://leetcode.com/problems/spiral-matrix/
         public static IList<int> SpiralOrder(int[,] matrix)
         {
