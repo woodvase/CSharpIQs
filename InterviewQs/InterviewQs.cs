@@ -68,6 +68,38 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/number-of-islands/
+        public int NumIslands(char[,] grid)
+        {
+            int row = grid.GetLength(0);
+            int col = grid.GetLength(1);
+            bool[,] visited = new bool[row, col];
+            int ret = 0;
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    if (grid[i, j] == '1' && !visited[i, j] && IsSurroundedByWater(i, j, grid, visited))
+                    {
+                        ret++;
+                    }
+                }
+            }
+            return ret;
+        }
+
+        private bool IsSurroundedByWater(int row, int col, char[,] grid, bool[,] state)
+        {
+            if (row < 0 || row >= grid.GetLength(0) || col < 0 || col >= grid.GetLength(1) || state[row, col] || grid[row, col] == '0')
+                return true;
+            state[row, col] = true;
+            bool up = IsSurroundedByWater(row - 1, col, grid, state);
+            bool down = IsSurroundedByWater(row + 1, col, grid, state);
+            bool left = IsSurroundedByWater(row, col - 1, grid, state);
+            bool right = IsSurroundedByWater(row, col + 1, grid, state);
+            return up && down && left && right;
+        }
+
         // https://leetcode.com/problems/first-bad-version/
         public int FirstBadVersion(int n)
         {
