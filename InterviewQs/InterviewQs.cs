@@ -68,6 +68,64 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/surrounded-regions/
+        public void Solve(char[,] board)
+        {
+            int row = board.GetLength(0);
+            int col = board.GetLength(1);
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    // For all the 'O's on the border, change it and its neighbour to '1'
+                    if (i == 0 || i == row - 1 || j == 0 || j == col - 1)
+                    {
+                        if (board[i, j] == 'O')
+                        {
+                            Queue<int> q = new Queue<int>();
+                            q.Enqueue(i * col + j);
+                            while (q.Count > 0)
+                            {
+                                int tmp = q.Dequeue();
+                                int tmpr = tmp / col;
+                                int tmpc = tmp % col;
+                                board[tmpr, tmpc] = '1';
+                                if (tmpr - 1 >= 0 && board[tmpr - 1, tmpc] == 'O')
+                                {
+                                    q.Enqueue((tmpr - 1) * col + tmpc);
+                                    board[tmpr - 1, tmpc] = '1';
+                                }
+                                if (tmpr + 1 < row && board[tmpr + 1, tmpc] == 'O')
+                                {
+                                    q.Enqueue((tmpr + 1) * col + tmpc);
+                                    board[tmpr + 1, tmpc] = '1';
+                                }
+                                if (tmpc - 1 >= 0 && board[tmpr, tmpc - 1] == 'O')
+                                {
+                                    q.Enqueue(tmpr * col + tmpc - 1);
+                                    board[tmpr, tmpc - 1] = '1';
+                                }
+                                if (tmpc + 1 < col && board[tmpr, tmpc + 1] == 'O')
+                                {
+                                    q.Enqueue(tmpr * col + tmpc + 1);
+                                    board[tmpr, tmpc + 1] = '1';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < col; j++)
+                {
+                    // Update all '1' to 'O' and all others to 'X'
+                    board[i, j] = board[i, j] == '1' ? 'O' : 'X';
+                }
+            }
+        }
+        
         // https://leetcode.com/problems/number-of-islands/
         public int NumIslands(char[,] grid)
         {
