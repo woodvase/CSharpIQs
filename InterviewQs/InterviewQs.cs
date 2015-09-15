@@ -68,6 +68,64 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        //https://leetcode.com/problems/candy/
+        public int Candy(int[] ratings)
+        {
+            int[] c = new int[ratings.Length];
+            for (int i = 0; i < c.Length; i++)
+            {
+                c[i] = 1;
+            }
+            for (int i = 1; i < ratings.Length; i++)
+            {
+                if (ratings[i] > ratings[i - 1])
+                {
+                    c[i] = c[i - 1] + 1;
+                }
+            }
+            int sum = c[c.Length - 1];
+            for (int i = ratings.Length - 2; i >= 0; i--)
+            {
+                if ((ratings[i] > ratings[i + 1]) && c[i] < c[i + 1] + 1)
+                {
+                    c[i] = c[i + 1] + 1;
+                }
+                sum += c[i];
+            }
+
+            return sum;
+        }
+
+        // https://leetcode.com/problems/gas-station/
+        public int CanCompleteCircuit(int[] gas, int[] cost)
+        {
+            int start = 0;
+            int remainedGas = 0;
+            int totalGas = 0;
+            int totalCost = 0;
+
+            for (int i = 0; i < gas.Length; i++)
+            {
+                totalCost += cost[i];
+                totalGas += gas[i];
+
+                remainedGas += gas[i] - cost[i];
+                if (remainedGas < 0)
+                {
+                    // From 0 cannot reach to i, from any k between 0 to i cannot reach to i, otherwise 0 can reach to i. So start from i + 1 
+                    remainedGas = 0;
+                    start = i + 1;
+                }
+            }
+
+            if (totalCost <= totalGas)
+            {
+                return start;
+            }
+
+            return -1;
+        }
+
         // https://leetcode.com/problems/surrounded-regions/
         public void Solve(char[,] board)
         {
