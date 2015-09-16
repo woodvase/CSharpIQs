@@ -69,6 +69,54 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/binary-tree-inorder-traversal/
+        public IList<int> InorderTraversal(TreeNode root)
+        {
+            IList<int> ret = new List<int>();
+            if (root == null) return ret;
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            s.Push(root);
+            TreeNode n = root.left;
+            while (s.Count > 0)
+            {
+                while (n != null)
+                {
+                    s.Push(n);
+                    n = n.left;
+                }
+                n = s.Pop();
+                ret.Add(n.val);
+                n = n.right;
+                if (n != null)
+                {
+                    s.Push(n);
+                    n = n.left;
+                }
+            }
+
+            return ret;
+        }
+
+        // https://leetcode.com/problems/binary-tree-preorder-traversal/
+        public IList<int> PreorderTraversal(TreeNode root)
+        {
+            IList<int> ret = new List<int>();
+            if (root == null) return ret;
+            Stack<TreeNode> s = new Stack<TreeNode>();
+            s.Push(root);
+            while (s.Count > 0)
+            {
+                TreeNode node = s.Pop();
+                ret.Add(node.val);
+                if (node.right != null)
+                    s.Push(node.right);
+                if (node.left != null)
+                    s.Push(node.left);
+            }
+
+            return ret;
+        }
+
         // https://leetcode.com/problems/evaluate-reverse-polish-notation/
         public int EvalRPN(string[] tokens)
         {
