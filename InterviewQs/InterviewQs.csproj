@@ -57,6 +57,7 @@
     <Compile Include="QueueBasedOnStack.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="Trie.cs" />
+    <Compile Include="UndirectedGraphNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
