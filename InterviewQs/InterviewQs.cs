@@ -18,6 +18,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            Console.WriteLine(SimplifyPath("/"));
             SpiralOrder(new int[,] { { 2, 3, 4 } });
             Console.WriteLine(NumberToWords(103));
             Console.WriteLine(Multiply("124", "0"));
@@ -66,6 +67,62 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        // https://leetcode.com/problems/evaluate-reverse-polish-notation/
+        public int EvalRPN(string[] tokens)
+        {
+            Stack<string> s = new Stack<string>();
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                if (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/")
+                {
+                    if (s.Count > 0)
+                    {
+                        int m = Int32.Parse(s.Pop());
+                        int n = Int32.Parse(s.Pop());
+                        switch (tokens[i])
+                        {
+                            case "+": s.Push((m + n).ToString()); break;
+                            case "-": s.Push((n - m).ToString()); break;
+                            case "*": s.Push((m * n).ToString()); break;
+                            case "/": s.Push((n / m).ToString()); break;
+                        }
+                    }
+                }
+                else
+                {
+                    s.Push(tokens[i]);
+                }
+            }
+
+            return Int32.Parse(s.Pop());
+        }
+
+        // https://leetcode.com/problems/simplify-path/
+        public static string SimplifyPath(string path)
+        {
+            string[] strs = path.Split('/');
+            Stack<string> stk = new Stack<string>();
+            for(int i = 0; i < strs.Length; i ++)
+            {
+                if (strs[i] == ".." && stk.Count > 0)
+                    stk.Pop();
+                if (strs[i] != "." && strs[i] != ".." && strs[i].Length > 0)
+                    stk.Push(strs[i]);
+            }
+            StringBuilder sb = new StringBuilder();
+            while (stk.Count > 0)
+            {
+                string s = stk.Pop();
+                s.TrimEnd('/');
+                sb.Insert(0, s);
+                sb.Insert(0, "/");
+            }
+
+            if (sb.Length == 0)
+                return "/";
+            return sb.ToString();
         }
 
         //https://leetcode.com/problems/candy/
