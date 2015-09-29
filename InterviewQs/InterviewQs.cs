@@ -69,6 +69,65 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // https://leetcode.com/problems/move-zeroes/
+        public void MoveZeroes(int[] nums)
+        {
+            if (nums == null || nums.Length == 0) return;
+            int nextZero = 0;
+            int nextNonZero = 0;
+
+            while (nextZero < nums.Length && nums[nextZero] != 0)
+            {
+                nextZero++;
+            }
+            nextNonZero = nextZero + 1;
+            while (nextNonZero < nums.Length)
+            {
+                if (nums[nextNonZero] != 0)
+                {
+                    nums[nextZero ++] = nums[nextNonZero];
+                    nums[nextNonZero] = 0;
+                }
+                nextNonZero++;
+            }
+        }
+
+        // https://leetcode.com/problems/clone-graph/
+        public UndirectedGraphNode CloneGraph(UndirectedGraphNode node)
+        {
+            if (node == null) return null;
+            UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
+            Dictionary<int, UndirectedGraphNode> dict = new Dictionary<int, UndirectedGraphNode>();
+            CloneGraphHelper(node, newNode, dict);
+            return newNode;
+        }
+
+        private void CloneGraphHelper(UndirectedGraphNode original, UndirectedGraphNode newNode, Dictionary<int, UndirectedGraphNode> dict)
+        {
+            foreach (UndirectedGraphNode origainalNeighbor in original.neighbors)
+            {
+                if (origainalNeighbor == original)
+                {
+                    newNode.neighbors.Add(newNode);
+                }
+                else
+                {
+                    if (!dict.ContainsKey(origainalNeighbor.label))
+                    {
+                        UndirectedGraphNode newNeighbor = new UndirectedGraphNode(origainalNeighbor.label);
+                        newNode.neighbors.Add(newNeighbor);
+                        CloneGraphHelper(origainalNeighbor, newNeighbor, dict);
+                        dict.Add(origainalNeighbor.label, newNeighbor);
+                    }
+                    else
+                    {
+                        // Already cloned, so just to get this node to add
+                        newNode.neighbors.Add(dict[origainalNeighbor.label]);
+                    }
+                }
+            }
+        }
+
         // https://leetcode.com/problems/binary-tree-inorder-traversal/
         public IList<int> InorderTraversal(TreeNode root)
         {
@@ -1762,7 +1821,7 @@ namespace InterviewQs
 
             return newHead;
         }
-
+        
         public static void PrintSet(int i)
         {
             if (i == 0)
@@ -1908,7 +1967,7 @@ namespace InterviewQs
             return maxLength;
         }
 
-        public static IList<int> PreorderTraversal(TreeNode root)
+        public static IList<int> PreorderTraversal2(TreeNode root)
         {
             IList<int> ret = new List<int>();
             if (root == null)
