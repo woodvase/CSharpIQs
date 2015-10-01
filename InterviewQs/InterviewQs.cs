@@ -18,6 +18,7 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            Subsets(new int[] { 1, 2, 3 });
             Console.WriteLine(SimplifyPath("/"));
             SpiralOrder(new int[,] { { 2, 3, 4 } });
             Console.WriteLine(NumberToWords(103));
@@ -1821,7 +1822,36 @@ namespace InterviewQs
 
             return newHead;
         }
-        
+
+        public static IList<IList<int>> Subsets(int[] nums)
+        {
+            List<IList<int>> ret = new List<IList<int>>();
+            SubsetsHelper(nums, 0, ret);
+            return ret;
+        }
+
+        private static void SubsetsHelper(int[] nums, int start, IList<IList<int>> sets)
+        {
+            if (start == nums.Length)
+            {
+                sets.Add(new List<int>());
+            }
+            else
+            {
+                IList<IList<int>> setscopy = new List<IList<int>>(sets);
+                foreach (IList<int> s in setscopy)
+                {
+                    IList<int> newSet = new List<int>(s);
+                    newSet.Add(nums[start]);
+                    sets.Add(newSet);
+                }
+
+                List<int> set = new List<int>();
+                set.Add(nums[start]);
+                sets.Add(set);
+                SubsetsHelper(nums, start + 1, sets);
+            }
+        }
         public static void PrintSet(int i)
         {
             if (i == 0)
