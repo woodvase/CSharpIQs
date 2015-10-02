@@ -70,6 +70,28 @@ namespace InterviewQs
             Console.ReadKey(true);
         }
 
+        // Given a tree string expression in balanced parenthesis format:
+        // (A(B(C)(D))(E)(F))
+        // Return the tree root 
+        static public TrieNode GetTreeNode(string str)
+        {
+            Stack<TrieNode> stk = new Stack<TrieNode>();
+            for (int i = 0; i < str.Length - 1; i++)
+            {
+                if (str[i] >= 'A' && str[i] <= 'Z')
+                {
+                    stk.Push(new TrieNode(str[i]));
+                }
+                if (str[i] == ')')
+                {
+                    TrieNode n = stk.Pop();
+                    stk.Peek().children.Add(n.value, n);
+                }
+            }
+
+            return stk.Pop();
+        }
+
         // https://leetcode.com/problems/move-zeroes/
         public void MoveZeroes(int[] nums)
         {
