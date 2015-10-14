@@ -18,6 +18,20 @@ namespace InterviewQs
         public static void Main(string[] args)
         {
             // TODO: Implement Functionality Here
+            TreeNode r = new TreeNode(1);
+            TreeNode n1 = new TreeNode(2);
+            TreeNode n2 = new TreeNode(3);
+            TreeNode n3 = new TreeNode(4);
+            TreeNode n4 = new TreeNode(5);
+
+            r.left = n1;
+            r.right = n2;
+            n1.left = n3;
+            n2.right = n4;
+
+            Console.WriteLine("Serilized tree: {0}", SerializeTree(r));
+            DeserializeTree("124###3#5##");
+
             Subsets(new int[] { 1, 2, 3 });
             Console.WriteLine(SimplifyPath("/"));
             SpiralOrder(new int[,] { { 2, 3, 4 } });
@@ -68,6 +82,51 @@ namespace InterviewQs
             //ContainsNearbyAlmostDuplicate(new int[]{7,1,3}, 2, 3);
             Console.Write("Press any key to continue . . . ");
             Console.ReadKey(true);
+        }
+
+        static TreeNode DeserializeTree(string serializedTree)
+        {
+            if (serializedTree == null || serializedTree.Length == 0)
+                return null;
+            // Using an object as the index indicator.
+            TreeNode index = new TreeNode(0);
+            TreeNode r = DeserializeTreeHelper(serializedTree, index);
+            return r;
+        }
+
+        static TreeNode DeserializeTreeHelper(string serializedTree, TreeNode indexNode)
+        {
+            if (indexNode.val >= serializedTree.Length)
+                return null;
+            if (serializedTree[indexNode.val] == '#')
+                return null;
+            TreeNode root = new TreeNode(serializedTree[indexNode.val] - '0');
+            indexNode.val++;
+            root.left = DeserializeTreeHelper(serializedTree, indexNode);
+            indexNode.val++;
+            root.right = DeserializeTreeHelper(serializedTree,indexNode);
+            return root;
+        }
+
+        static string SerializeTree(TreeNode root)
+        {
+            if (root == null)
+                return string.Empty;
+            StringBuilder sb = new StringBuilder();
+            SerializeTreeHelper(root, sb);
+            return sb.ToString();
+        }
+
+        static void SerializeTreeHelper(TreeNode n, StringBuilder outStr)
+        {
+            if (n == null)
+                outStr.Append("#");
+            else
+            {
+                outStr.Append(n.val.ToString());
+                SerializeTreeHelper(n.left, outStr);
+                SerializeTreeHelper(n.right, outStr);
+            }
         }
 
         // Given a tree string expression in balanced parenthesis format:
